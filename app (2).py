@@ -1,221 +1,170 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-import plotly.graph_objects as go
+import streamlit as st
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 
-# ----------------------------
-# App config
-# ----------------------------
-st.set_page_config(page_title="M&A Success Predictor (Benchmarks + ARIMA)", layout="wide")
-st.title("📊 M&A Success Predictor (Benchmarks) + 🔮 ARIMA Trend")
+# --- Train the Model ---
+@st.cache_resource
+def train_model(uploaded_file):
+    try:
+        data = pd.read_csv(uploaded_file)
+    except Exception as e:
+        st.error(f"Error loading CSV: {e}")
+        return None, None
 
-st.markdown(
-    "Enter the key deal numbers below. The model applies **industry-calibrated bands** (India context) "
-    "to compute a weighted success probability, shows a gauge and contribution chart, and projects a short trend."
-)
+    try:
+        # Encode categorical features
+        cat_cols = data.select_dtypes(include=['object']).columns.tolist()
+        le = LabelEncoder()
+        for col in cat_cols:
+            data[col] = le.fit_transform(data[col].astype(str))
 
-# ----------------------------
-# Input form
-# ----------------------------
-with st.form("inputs"):
+        if 'Success' not in data.columns:
+            st.error("The dataset must contain a 'Success' column as target variable.")
+            return None, None
+
+        X = data.drop('Success', axis=1)
+        y = data['Success']
+
+        # Random Forest for feature importance
+        rf = RandomForestClassifier(random_state=42)
+        rf.fit(X, y)
+        importances = pd.Series(rf.feature_importances_, index=X.columns)
+        top5_features = importances.sort_values(ascending=False).head(5).index.tolist()
+
+        # Train Logistic Regression on top 5 features
+        x = X[top5_features]
+        x_train, x_test, y_train, y_test = train_test_split(
+            x, y, test_size=0.2, random_state=42, stratify=y
+        )
+        model = LogisticRegression()
+        model.fit(x_train, y_train)
+
+        return model, top5_features, importances
+    
+    except Exception as e:
+        st.error(f"Training Error: {e}")
+        return None, None, None
+
+
+# --- Load Custom Styling ---
+def load_css():
+    st.markdown("""
+        <style>
+            .stApp { background-color: #f0f2f6; }
+            [data-testid="stAppViewContainer"] > .main .block-container {
+                background-color: #ffffff;
+                padding: 2rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                max-width: 950px;
+                margin: 0 auto;
+            }
+            h1 { color: #2c3e50; text-align: center; font-weight: 700; }
+            .stButton > button {
+                background-color: #3b82f6; color: white; border: none;
+                padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 600; width: 100%;
+            }
+            .stButton > button:hover { background-color: #2563eb; color: white; }
+        </style>
+    """, unsafe_allow_html=True)
+
+
+# --- Streamlit App Starts ---
+st.set_page_config(page_title="Advanced M&A Success Predictor")
+load_css()
+st.title("🤝 Advanced M&A Success Predictor with Analytical Insights")
+
+uploaded_file = st.file_uploader("Upload your CSV file for training", type="csv")
+
+if uploaded_file is None:
+    st.info("Upload your CSV file to train the model.")
+    st.stop()
+
+model, features_list, importances = train_model(uploaded_file)
+
+if model is None:
+    st.warning("Model training failed. Please check your file.")
+    st.stop()
+
+st.success("✅ Model trained successfully using your dataset.")
+st.write(f"**Top 5 Predictive Features Identified:** {', '.join(features_list)}")
+
+# --- User Inputs ---
+st.write("<p style='text-align:center; color:#4b5563;'>Enter feature values and assign importance weights to simulate different M&A scenarios.</p>", unsafe_allow_html=True)
+
+with st.form(key='prediction_form'):
+    st.subheader("Input Feature Values & Weights")
+    input_values = []
+    weights = []
+
     col1, col2 = st.columns(2)
     with col1:
-        roe_acquirer = st.number_input("ROE (Acquirer) %", min_value=0.0, max_value=100.0, value=18.0, step=0.1)
-        roe_target = st.number_input("ROE (Target) %", min_value=0.0, max_value=100.0, value=14.0, step=0.1)
-        debt_equity = st.number_input("Debt-to-Equity (Acquirer)", min_value=0.0, max_value=10.0, value=1.2, step=0.05)
+        for feature in features_list:
+            val = st.number_input(f"{feature} Value", value=0.0, format="%.2f")
+            input_values.append(val)
     with col2:
-        interest_cov = st.number_input("Interest Coverage Ratio", min_value=0.0, max_value=50.0, value=5.0, step=0.1)
-        synergy = st.slider("Synergy Potential Score (0–1)", 0.0, 1.0, 0.65, step=0.01)
-        culture = st.slider("Cultural Fit Score (0–1)", 0.0, 1.0, 0.70, step=0.01)
+        for feature in features_list:
+            wt = st.slider(f"{feature} Weight", 0.0, 1.0, 0.2)
+            weights.append(wt)
 
-    submitted = st.form_submit_button("Predict")
-
-# ----------------------------
-# Scoring helpers (based on your ranges)
-# ----------------------------
-def score_roe(x):
-    if x < 10: return 0.4, "Low"
-    if x < 15: return 0.6, "Moderate"
-    if x <= 25: return 0.8, "Good"
-    return 1.0, "Exceptional"
-
-def score_de(x):
-    if x < 1: return 1.0, "Healthy"
-    if x <= 2: return 0.7, "Moderately Leveraged"
-    return 0.3, "High Risk"
-
-def score_ic(x):
-    if x < 3: return 0.4, "Weak"
-    if x <= 5: return 0.7, "Acceptable"
-    return 1.0, "Strong"
-
-def score_0_1(x):
-    if x < 0.4: return 0.4, "Low"
-    if x <= 0.7: return 0.7, "Medium"
-    return 1.0, "High"
-
-# Feature weights (can be tuned per business preference)
-WEIGHTS = {
-    "ROE (Acquirer)": 0.25,
-    "ROE (Target)": 0.15,
-    "Debt-to-Equity": 0.20,
-    "Interest Coverage": 0.20,
-    "Synergy": 0.10,
-    "Culture": 0.10,
-}
+    submitted = st.form_submit_button("🔍 Analyze Prediction")
 
 if submitted:
-    # ----------------------------
-    # Compute component scores
-    # ----------------------------
-    comp_scores = {
-        "ROE (Acquirer)": score_roe(roe_acquirer),
-        "ROE (Target)": score_roe(roe_target),
-        "Debt-to-Equity": score_de(debt_equity),
-        "Interest Coverage": score_ic(interest_cov),
-        "Synergy": score_0_1(synergy),
-        "Culture": score_0_1(culture),
-    }
-    # numeric score only
-    s_numeric = {k: v[0] for k, v in comp_scores.items()}
+    try:
+        input_df = pd.DataFrame([input_values], columns=features_list)
+        weighted_input = np.multiply(input_values, weights)
 
-    # Weighted success probability (0–100%)
-    success_prob = sum(s_numeric[k]*WEIGHTS[k] for k in s_numeric) * 100
+        composite_score = np.sum(weighted_input) / np.sum(weights)
+        prediction = model.predict(input_df)[0]
+        probabilities = model.predict_proba(input_df)[0]
 
-    # ----------------------------
-    # Top/bottom drivers for explanation
-    # ----------------------------
-    # contribution = score * weight (how much each factor adds to 100%)
-    contributions = {k: s_numeric[k]*WEIGHTS[k]*100 for k in s_numeric}
-    top_driver = max(contributions, key=contributions.get)
-    bottom_driver = min(contributions, key=contributions.get)
+        st.markdown("---")
+        st.subheader("🧠 Prediction Result & Analysis")
 
-    # qualitative band
-    if success_prob >= 80:
-        band_text = "🟢 Excellent potential — financials and alignment are strong."
-        band_color = "#16a34a"
-    elif success_prob >= 60:
-        band_text = "🟡 Moderate potential — strengthen integration and risk controls."
-        band_color = "#f59e0b"
-    else:
-        band_text = "🔴 High risk — review leverage and operational alignment."
-        band_color = "#ef4444"
+        # --- Prediction Output ---
+        if int(prediction) == 1:
+            st.success("✅ The model predicts: **Success (1)**")
+            st.write(f"**Interpretation:** A strong positive alignment between critical financial and strategic indicators leads to a favorable merger outlook. The weighted composite score of **{composite_score:.2f}** supports a high synergy potential.")
+        else:
+            st.error("⚠️ The model predicts: **Failure (0)**")
+            st.write(f"**Interpretation:** Certain parameters indicate weak alignment or high risk areas. The weighted composite score of **{composite_score:.2f}** suggests that success factors may be insufficient for synergy realization.")
 
-    # ----------------------------
-    # 1) Prediction Gauge (Plotly)
-    # ----------------------------
-    st.subheader("🎯 Prediction")
-    gauge = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=success_prob,
-        number={"suffix": " %"},
-        gauge={
-            "axis": {"range": [0, 100]},
-            "bar": {"color": band_color},
-            "steps": [
-                {"range": [0, 60], "color": "#fee2e2"},
-                {"range": [60, 80], "color": "#fef3c7"},
-                {"range": [80, 100], "color": "#dcfce7"},
-            ],
-            "threshold": {"line": {"color": band_color, "width": 3}, "thickness": 0.75, "value": success_prob}
-        },
-        title={"text": "Predicted Success Probability"}
-    ))
-    st.plotly_chart(gauge, use_container_width=True)
+        # --- Probability Visualization ---
+        st.subheader("📊 Prediction Probability Distribution")
+        fig, ax = plt.subplots()
+        categories = ['Failure (0)', 'Success (1)']
+        ax.bar(categories, probabilities, color=['red', 'green'])
+        ax.set_ylim(0, 1)
+        ax.set_ylabel('Probability')
+        ax.set_title('Model Confidence')
+        for i, v in enumerate(probabilities):
+            ax.text(i, v + 0.02, f"{v:.2f}", ha='center', fontweight='bold')
+        st.pyplot(fig)
 
-    # ----------------------------
-    # 2) Contribution chart
-    # ----------------------------
-    st.subheader("🧩 Factor Contributions")
-    bar = go.Figure()
-    bar.add_trace(go.Bar(
-        x=list(contributions.keys()),
-        y=list(contributions.values()),
-        text=[f"{v:.1f}%" for v in contributions.values()],
-        textposition="auto",
-        name="Contribution to Success %"
-    ))
-    bar.update_layout(
-        xaxis_title="Factor",
-        yaxis_title="Contribution (%)",
-        template="plotly_white",
-        margin=dict(l=10, r=10, t=40, b=10)
-    ))
-    st.plotly_chart(bar, use_container_width=True)
+        # --- Parameter Influence Chart ---
+        st.subheader("⚖️ Parameter Influence (Weighted Impact)")
+        influence_df = pd.DataFrame({
+            'Feature': features_list,
+            'Value': input_values,
+            'Weight': weights,
+            'Weighted Impact': weighted_input
+        }).sort_values(by='Weighted Impact', ascending=False)
 
-    # ----------------------------
-    # Two-line explanation (dynamic)
-    # ----------------------------
-    st.markdown("**Quick take:**")
-    st.write(
-        f"**{band_text}** Based on your inputs, the biggest boost comes from **{top_driver}**, "
-        f"while **{bottom_driver}** drags the score the most."
-    )
-    st.write(
-        "Focus on improving the weakest driver (e.g., reduce D/E, raise ROE, or strengthen synergy/culture) "
-        "to lift the overall success probability."
-    )
+        st.dataframe(influence_df.style.background_gradient(cmap='Blues', subset=["Weighted Impact"]))
 
-    # ----------------------------
-    # Details table
-    # ----------------------------
-    st.markdown("### Component ratings")
-    details = pd.DataFrame({
-        "Parameter": list(comp_scores.keys()),
-        "Input": [
-            f"{roe_acquirer:.2f}%", f"{roe_target:.2f}%",
-            f"{debt_equity:.2f}x", f"{interest_cov:.2f}x",
-            f"{synergy:.2f}", f"{culture:.2f}"
-        ],
-        "Score (0–1)": [s_numeric[k] for k in comp_scores],
-        "Band": [comp_scores[k][1] for k in comp_scores],
-        "Weight": [WEIGHTS[k] for k in comp_scores],
-        "Contribution (%)": [contributions[k] for k in comp_scores],
-    })
-    st.dataframe(details, use_container_width=True)
-
-    # ----------------------------
-    # 🔮 Short ARIMA trend (synthetic history → near-term projection)
-    # ----------------------------
-    st.markdown("---")
-    st.subheader("🔮 Near-term Success Trend (ARIMA)")
-
-    # Build a short synthetic history that ends at current predicted level
-    years_hist = np.arange(2016, 2025)
-    hist = np.linspace(60, success_prob, len(years_hist)) + np.random.normal(0, 2.0, len(years_hist))
-    model = SARIMAX(hist, order=(1, 1, 1))
-    fit = model.fit(disp=False)
-    steps = 5
-    future = fit.get_forecast(steps=steps)
-    mean = future.predicted_mean
-    ci = future.conf_int()
-
-    years_fut = np.arange(2025, 2025 + steps)
-    fut_df = pd.DataFrame({
-        "Year": years_fut,
-        "Forecast": mean.values,
-        "Lower_CI": ci.iloc[:, 0].values,
-        "Upper_CI": ci.iloc[:, 1].values
-    })
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=years_hist, y=hist, mode="lines+markers", name="Historical (synthetic)"))
-    fig.add_trace(go.Scatter(x=fut_df["Year"], y=fut_df["Forecast"], mode="lines+markers", name="Forecast", line=dict(dash="dot")))
-    fig.add_trace(go.Scatter(
-        x=list(fut_df["Year"]) + list(fut_df["Year"])[::-1],
-        y=list(fut_df["Upper_CI"]) + list(fut_df["Lower_CI"])[::-1],
-        fill="toself", name="95% CI", line=dict(color="rgba(0,0,0,0)"), fillcolor="rgba(16,185,129,0.15)"
-    ))
-    fig.update_layout(template="plotly_white", xaxis_title="Year", yaxis_title="Success Score (%)")
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Micro-summary for forecast
-    delta_pct = ((mean.values[-1] - hist[-1]) / max(1e-9, abs(hist[-1]))) * 100
-    if delta_pct >= 0:
-        st.success(f"Projected **{delta_pct:.1f}%** improvement over the next {steps} years (point forecast).")
-    else:
-        st.error(f"Projected **{abs(delta_pct):.1f}%** decline over the next {steps} years (point forecast).")
-
-else:
-    st.info("Fill the inputs and click **Predict** to see the gauge, contributions, and explanation.")
+        # --- Analytical Insight Summary ---
+        top_influencer = influence_df.iloc[0]['Feature']
+        st.markdown(f"""
+        ### 🔍 Analytical Insight
+        - The feature **{top_influencer}** currently has the highest weighted influence on the outcome.
+        - Increasing or optimizing this parameter could significantly alter the merger's success probability.
+        - The model's overall confidence in prediction is **{max(probabilities)*100:.2f}%**.
+        """)
+        
+    except Exception as e:
+        st.error(f"Prediction error: {e}")
