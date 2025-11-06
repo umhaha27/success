@@ -8,11 +8,8 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
 from weasyprint import HTML
-from statsmodels.tsa.arima.model import ARIMA
-import warnings
-warnings.filterwarnings("ignore")
 
 # =========================================
 # MODEL TRAINING FUNCTION
@@ -29,6 +26,7 @@ def train_model(uploaded_file):
         st.error("Dataset must include a 'Success' target column.")
         return None, None, None, None, None, None
 
+    # Encode categorical columns
     cat_cols = data.select_dtypes(include=['object']).columns.tolist()
     le = LabelEncoder()
     for col in cat_cols:
@@ -37,13 +35,16 @@ def train_model(uploaded_file):
     X = data.drop('Success', axis=1)
     y = data['Success']
 
+    # Train Random Forest for feature selection
     rf = RandomForestClassifier(random_state=42, n_estimators=200)
     rf.fit(X, y)
     importances = pd.Series(rf.feature_importances_, index=X.columns)
     top_features = importances.sort_values(ascending=False).head(5).index.tolist()
 
+    # Train Logistic Regression for prediction
     x = X[top_features]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42, stratify=y)
+
     scaler = StandardScaler()
     x_train_scaled = scaler.fit_transform(x_train)
     x_test_scaled = scaler.transform(x_test)
@@ -51,17 +52,20 @@ def train_model(uploaded_file):
     model = LogisticRegression(max_iter=1000, random_state=42)
     model.fit(x_train_scaled, y_train)
 
+    # Metrics
     y_pred = model.predict(x_test_scaled)
     acc = accuracy_score(y_test, y_pred)
     prec = precision_score(y_test, y_pred)
     rec = recall_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred)
+    auc = roc_auc_score(y_test, model.predict_proba(x_test_scaled)[:, 1])
 
     metrics = {
         "Accuracy": acc,
         "Precision": prec,
         "Recall": rec,
         "F1": f1,
+        "ROC_AUC": auc,
         "Confusion": confusion_matrix(y_test, y_pred)
     }
 
@@ -69,14 +73,14 @@ def train_model(uploaded_file):
 
 
 # =========================================
-# STREAMLIT APP
+# STREAMLIT UI SETUP
 # =========================================
-st.set_page_config(page_title="M&A Success Predictor — ML + ARIMA", layout="wide")
-st.title("🤖 M&A Success Predictor — ML + Time-Series Forecasting Dashboard")
+st.set_page_config(page_title="M&A Success Predictor — Full ML Analytics", layout="wide")
+st.title("🤖 M&A Success Predictor — ML-Powered Analytical Dashboard")
 
-uploaded_file = st.file_uploader("📂 Upload your M&A dataset (CSV with 'Success' column and 'Year')", type="csv")
+uploaded_file = st.file_uploader("📂 Upload your M&A dataset (CSV with 'Success' column)", type="csv")
 if uploaded_file is None:
-    st.info("Please upload a dataset to train the model.")
+    st.info("Upload a dataset to train and analyze the ML model.")
     st.stop()
 
 model, features, importances, scaler, metrics, data = train_model(uploaded_file)
@@ -84,93 +88,149 @@ if model is None:
     st.stop()
 
 # =========================================
-# BASE METRICS
+# MODEL PERFORMANCE METRICS
 # =========================================
 st.header("📈 Model Evaluation Summary")
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
 col2.metric("Precision", f"{metrics['Precision']*100:.2f}%")
 col3.metric("Recall", f"{metrics['Recall']*100:.2f}%")
 col4.metric("F1 Score", f"{metrics['F1']*100:.2f}%")
+col5.metric("ROC-AUC", f"{metrics['ROC_AUC']*100:.2f}%")
+
+st.markdown("#### Confusion Matrix")
+fig, ax = plt.subplots()
+sns.heatmap(metrics["Confusion"], annot=True, fmt="d", cmap="Blues", cbar=False)
+ax.set_xlabel("Predicted")
+ax.set_ylabel("Actual")
+st.pyplot(fig)
 
 # =========================================
-# FULL DATA SUCCESS PROBABILITIES
+# 🔍 FULL DATA ANALYSIS & INTERPRETATION
 # =========================================
 st.markdown("---")
-st.header("📊 Success Range & Time-Series Forecasting")
+st.header("📊 Full Dataset ML Analysis & Success Range Classification")
 
+# Prepare prediction for entire dataset
 X_all = data[features]
 scaled_all = scaler.transform(X_all)
 data["Predicted_Probability"] = model.predict_proba(scaled_all)[:, 1]
 data["Predicted_Success"] = model.predict(scaled_all)
 
+# Define success range categories
 def classify_range(prob):
     if prob >= 0.75:
-        return "High Success 🟢"
+        return "High Success Potential 🟢"
     elif prob >= 0.5:
-        return "Moderate Success 🟡"
+        return "Moderate Success Potential 🟡"
     else:
-        return "Low Success 🔴"
+        return "Low Success Potential 🔴"
 
 data["Success_Range"] = data["Predicted_Probability"].apply(classify_range)
 
+# Display sample output
 st.dataframe(data.head(10).style.background_gradient(cmap="Blues", subset=["Predicted_Probability"]))
 
-fig = px.histogram(data, x="Predicted_Probability", nbins=20, color="Success_Range",
-                   color_discrete_sequence=["red", "yellow", "green"],
-                   title="Distribution of Predicted Success Probabilities")
-st.plotly_chart(fig, use_container_width=True)
+# =========================================
+# RANGE DISTRIBUTION VISUALIZATION
+# =========================================
+st.subheader("📈 Success Probability Distribution")
+fig1 = px.histogram(
+    data, x="Predicted_Probability", nbins=20,
+    title="Distribution of Predicted Success Probabilities",
+    color="Success_Range", color_discrete_sequence=["red", "yellow", "green"]
+)
+st.plotly_chart(fig1, use_container_width=True)
 
 # =========================================
-# ARIMA FORECASTING (TIME-SERIES)
+# CORRELATION INSIGHT
 # =========================================
-if 'Year' in data.columns:
-    st.subheader("🔮 ARIMA Forecast — Future Success Trend Prediction")
-
-    year_avg = data.groupby("Year")["Predicted_Probability"].mean().sort_index()
-    st.line_chart(year_avg, height=300)
-
-    # Fit ARIMA model
-    try:
-        model_arima = ARIMA(year_avg, order=(1, 1, 1))
-        fitted_arima = model_arima.fit()
-        forecast = fitted_arima.forecast(steps=5)
-        forecast_years = range(int(year_avg.index.max()) + 1, int(year_avg.index.max()) + 6)
-        forecast_df = pd.DataFrame({"Year": forecast_years, "Forecasted_Success": forecast.values})
-
-        # Plot
-        fig2 = go.Figure()
-        fig2.add_trace(go.Scatter(x=year_avg.index, y=year_avg.values, mode='lines+markers', name="Historical"))
-        fig2.add_trace(go.Scatter(x=forecast_df["Year"], y=forecast_df["Forecasted_Success"], mode='lines+markers', name="Forecast", line=dict(color="green", dash="dot")))
-        fig2.update_layout(title="ARIMA Forecast of Future Success Probability Trends",
-                           xaxis_title="Year", yaxis_title="Average Predicted Success Probability")
-        st.plotly_chart(fig2, use_container_width=True)
-
-        st.success(f"✅ ARIMA model forecasts an **average success probability of {forecast.values[-1]*100:.2f}%** for {forecast_years[-1]}.")
-    except Exception as e:
-        st.warning(f"⚠️ ARIMA model could not be fitted: {e}")
-else:
-    st.warning("⚠️ No 'Year' column found. Please include a Year column for ARIMA forecasting.")
+st.subheader("📉 Feature Correlation with Success")
+corr_df = data[features + ["Predicted_Probability"]].corr()["Predicted_Probability"].drop("Predicted_Probability").sort_values(ascending=False)
+corr_table = corr_df.reset_index().rename(columns={"index": "Feature", "Predicted_Probability": "Correlation"})
+st.dataframe(corr_table.style.background_gradient(cmap="Greens", subset=["Correlation"]))
 
 # =========================================
-# ANALYTICAL SUMMARY
+# AI-GENERATED INTERPRETIVE SUMMARY
 # =========================================
-st.markdown("---")
-st.header("🧠 Analytical Insights Summary")
+st.markdown("### 🧠 ML-Generated Analytical Summary")
 
-high = (data["Success_Range"] == "High Success 🟢").sum()
-moderate = (data["Success_Range"] == "Moderate Success 🟡").sum()
-low = (data["Success_Range"] == "Low Success 🔴").sum()
+high_count = (data["Success_Range"] == "High Success Potential 🟢").sum()
+mod_count = (data["Success_Range"] == "Moderate Success Potential 🟡").sum()
+low_count = (data["Success_Range"] == "Low Success Potential 🔴").sum()
+total = len(data)
 avg_prob = data["Predicted_Probability"].mean() * 100
+top_corr = corr_table.iloc[0]["Feature"]
+bottom_corr = corr_table.iloc[-1]["Feature"]
 
 summary_text = f"""
-The model analyzed **{len(data)} deals**, identifying:
-- 🟢 {high} High Success deals  
-- 🟡 {moderate} Moderate Success deals  
-- 🔴 {low} Low Success deals  
+Out of **{total} total deals**, the ML model classified:
+- 🟢 **{high_count} deals** as *High Success Potential*
+- 🟡 **{mod_count} deals** as *Moderate Success Potential*
+- 🔴 **{low_count} deals** as *Low Success Potential*
 
-The **average predicted success probability** is **{avg_prob:.2f}%**, 
-with ARIMA forecasting indicating future probability stability and gradual improvement.  
-Top influencing feature: **{features[0]}**
+The **average predicted success probability** is **{avg_prob:.2f}%**.
+Among all analyzed indicators, **{top_corr}** shows the strongest positive correlation with success,
+while **{bottom_corr}** has the weakest or negative influence.
+This suggests that optimizing **{top_corr}** can most effectively improve merger performance potential.
 """
 st.info(summary_text)
+
+# =========================================
+# VISUAL: PIE CHART FOR SUCCESS RANGE
+# =========================================
+st.subheader("🧩 Success Potential Breakdown")
+fig2 = px.pie(
+    data, names="Success_Range", title="Overall Success Potential Segmentation",
+    color="Success_Range", color_discrete_sequence=["red", "yellow", "green"]
+)
+st.plotly_chart(fig2, use_container_width=True)
+
+# =========================================
+# PDF EXPORT (FULL ANALYSIS)
+# =========================================
+st.markdown("---")
+st.header("📄 Generate Comprehensive ML Analysis Report")
+
+LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Logo-sample.svg/2560px-Logo-sample.svg.png"
+
+def generate_ml_report(metrics, summary_text):
+    html_content = f"""
+    <html><head><style>
+        body {{ font-family: Arial; margin: 40px; }}
+        h1 {{ color: #1e3a8a; }}
+        table {{ width: 100%; border-collapse: collapse; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: center; }}
+        th {{ background-color: #2563eb; color: white; }}
+        .summary {{ background-color: #f0f9ff; padding: 10px; border-left: 6px solid #2563eb; }}
+    </style></head><body>
+        <img src="{LOGO_URL}" width="150"/>
+        <h1>M&A Success ML Analytical Report</h1>
+        <div class="summary">
+            <h3>Performance Metrics</h3>
+            <ul>
+                <li>Accuracy: {metrics['Accuracy']*100:.2f}%</li>
+                <li>Precision: {metrics['Precision']*100:.2f}%</li>
+                <li>Recall: {metrics['Recall']*100:.2f}%</li>
+                <li>F1 Score: {metrics['F1']*100:.2f}%</li>
+                <li>ROC-AUC: {metrics['ROC_AUC']*100:.2f}%</li>
+            </ul>
+        </div>
+        <div class="summary">
+            <h3>AI Summary</h3>
+            <p>{summary_text}</p>
+        </div>
+        <p style="text-align:center; color:#6b7280; font-size:12px;">Generated by M&A Analytical Intelligence Dashboard © 2025</p>
+    </body></html>
+    """
+    return HTML(string=html_content).write_pdf()
+
+if st.button("📑 Generate ML Analysis Report"):
+    pdf_bytes = generate_ml_report(metrics, summary_text)
+    st.success("✅ Comprehensive ML Analysis Report Generated Successfully!")
+    st.download_button(
+        label="⬇️ Download ML Report (PDF)",
+        data=pdf_bytes,
+        file_name="MA_Success_Full_Analysis.pdf",
+        mime="application/pdf",
+    )
