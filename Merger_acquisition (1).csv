@@ -1,0 +1,201 @@
+Deal_ID,Year,Acquirer_Company,Target_Company,Industry_Sector,Deal_Value_INR_Crores,Acquirer_Revenue_INR_Crores,Target_Revenue_INR_Crores,Deal_Type,Cross_Border,Acquirer_Market_Cap_INR_Crores,Target_Market_Cap_INR_Crores,Debt_to_Equity_Acquirer,Debt_to_Equity_Target,ROE_Acquirer,ROE_Target,Premium_Paid_Percent,Due_Diligence_Duration_Days,Regulatory_Approvals_Required,Employee_Count_Acquirer,Employee_Count_Target,Geographic_Overlap,Technology_Integration_Required,Cultural_Fit_Score,Synergy_Potential_Score,Market_Share_Combined,Competition_Intensity,Economic_Growth_Rate,Stock_Market_Performance,Success
+1,2000,Tata Steel,Corus Group,Steel,34500,15000,8000,Acquisition,Yes,45000,12000,0.45,0.65,0.12,0.08,28.5,120,Yes,25000,18000,Low,High,6,8,15.5,High,5.2,Positive,1
+2,2001,Reliance Industries,Infotel Broadband,Telecom,4800,85000,150,Acquisition,No,125000,200,0.38,0.25,0.18,0.05,220,45,No,45000,500,Medium,Medium,7,9,8.2,Medium,4.8,Neutral,1
+3,2001,ICICI Bank,Bank of Madura,Banking,520,12000,800,Merger,No,18000,1200,0.15,0.22,0.15,0.12,18.5,90,Yes,15000,3500,High,Low,8,7,12.8,High,3.9,Negative,1
+4,2001,Videocon,Electrolux,Consumer Electronics,450,5500,2200,Joint Venture,Yes,8500,12000,0.68,0.45,0.09,0.12,0,75,No,12000,8500,Low,High,5,6,12.8,High,4.2,Neutral,0
+5,2002,Hindustan Unilever,Lakme,FMCG,200,8500,120,Acquisition,No,25000,180,0.28,0.35,0.22,0.18,45.2,60,No,8000,800,Medium,Low,9,8,22.1,Medium,6.1,Positive,1
+6,2002,Wipro,Spectramind,IT Services,105,3200,85,Acquisition,No,8500,150,0.12,0.18,0.24,0.16,35.8,75,No,12000,2500,Low,High,8,9,5.8,Low,7.2,Positive,1
+7,2003,Jet Airways,Air Sahara,Aviation,1400,3500,850,Acquisition,No,8500,1200,0.95,1.25,0.05,-0.08,85.2,120,Yes,8500,4500,Medium,Medium,4,5,18.5,High,5.8,Positive,0
+8,2003,ONGC,MRPL,Oil & Gas,3500,125000,8500,Acquisition,No,285000,12500,0.35,0.45,0.16,0.12,25.8,150,Yes,32000,5500,Medium,Low,7,8,18.5,Medium,5.8,Positive,1
+9,2004,Mittal Steel,Arcelor,Steel,25000,28500,18500,Acquisition,Yes,45000,28000,0.65,0.58,0.14,0.11,42.5,180,Yes,125000,85000,Low,Medium,5,7,25.8,High,6.8,Positive,1
+10,2004,Tata Motors,Daewoo Commercial,Automotive,3800,28000,4500,Acquisition,Yes,32000,2500,0.55,0.75,0.14,0.08,58.5,120,Yes,35000,8500,Low,Medium,6,7,8.9,High,8.1,Positive,1
+11,2005,Ranbaxy,Terapia,Pharmaceuticals,265,6500,185,Acquisition,Yes,25000,450,0.35,0.42,0.16,0.11,88.5,95,Yes,12000,850,Low,Medium,6,7,8.5,Medium,7.8,Positive,1
+12,2005,Bharti Airtel,Hexacom,Telecom,1850,18000,450,Acquisition,No,42000,800,0.42,0.38,0.19,0.13,28.9,85,Yes,25000,1200,High,Medium,7,8,18.5,Medium,9.2,Positive,1
+13,2005,Dr Reddy's,Betapharm,Pharmaceuticals,1250,4500,850,Acquisition,Yes,18500,1200,0.28,0.35,0.18,0.14,85.2,120,Yes,12500,2500,Low,Medium,6,7,12.5,Medium,7.8,Positive,1
+14,2006,Essar,Algoma Steel,Steel,1650,18500,2500,Acquisition,Yes,45000,1200,0.85,1.25,0.08,0.05,185.2,180,Yes,28500,5500,Low,Medium,4,5,3.8,High,8.8,Positive,0
+15,2006,Suzlon Energy,REpower Systems,Renewable Energy,1100,4500,800,Acquisition,Yes,12000,1500,0.65,0.52,0.16,0.11,82.5,95,Yes,8000,3500,Low,High,4,6,12.3,High,8.8,Positive,0
+16,2007,Tata Motors,Jaguar Land Rover,Automotive,15500,28000,12000,Acquisition,Yes,32000,18000,0.55,0.68,0.14,0.06,42.3,150,Yes,35000,22000,Low,Medium,5,7,8.9,High,8.1,Positive,0
+17,2007,Infosys,Axon Group,IT Services,590,18500,125,Acquisition,Yes,125000,285,0.08,0.18,0.28,0.22,325.8,85,No,85000,450,Low,High,8,9,3.2,Low,8.5,Positive,1
+18,2007,UB Group,Whyte & Mackay,Beverages,950,12000,1850,Acquisition,Yes,25000,2500,0.85,0.65,0.12,0.15,28.5,120,Yes,12000,1500,Low,Low,6,7,12.8,Medium,8.5,Positive,1
+19,2008,Tata Steel,Corus Steel,Steel,28500,15000,8000,Acquisition,Yes,45000,12000,0.45,0.65,0.12,0.08,58.5,180,Yes,25000,18000,Low,High,5,8,18.5,High,2.5,Negative,0
+20,2008,Mahindra Group,Satyam Computer,IT Services,850,15000,6500,Acquisition,No,25000,8000,0.48,0.75,0.17,0.02,15.2,180,Yes,55000,45000,Medium,High,3,4,14.2,High,2.5,Negative,0
+21,2008,Sterlite,Asarco,Mining,2400,12500,8500,Acquisition,Yes,25000,4500,0.65,0.95,0.12,0.02,58.5,240,Yes,18500,12500,Low,Low,5,6,12.5,Medium,2.8,Negative,0
+22,2008,Reliance Communications,Flag Telecom,Telecom,2100,22000,1200,Acquisition,Yes,35000,2500,0.72,0.58,0.08,0.09,95.8,210,Yes,18000,800,Low,High,5,5,6.8,Medium,5.8,Neutral,0
+23,2009,Bharti Airtel,Zain Africa,Telecom,8500,28500,4500,Acquisition,Yes,85000,12500,0.42,0.55,0.19,0.11,85.2,240,Yes,25000,8500,Low,Medium,6,7,22.5,High,4.5,Negative,1
+24,2009,Mahindra,Reva Electric,Automotive,25,28000,15,Acquisition,No,85000,25,0.45,0.85,0.18,-0.25,158.5,45,No,125000,285,Medium,High,6,4,0.8,Medium,4.5,Negative,0
+25,2010,Coal India,BCCL,Mining,0,45000,8500,Merger,No,120000,15000,0.25,0.35,0.21,0.16,0,120,Yes,85000,25000,High,Low,8,9,45.2,Low,8.5,Positive,1
+26,2010,Tech Mahindra,Satyam,IT Services,5800,8500,6500,Acquisition,No,45000,1200,0.38,0.85,0.18,0.02,285.5,150,Yes,58500,45000,Medium,High,6,8,22.5,High,8.5,Positive,1
+27,2010,Cairn Energy,Cairn India,Oil & Gas,8500,12500,4500,Acquisition,Yes,28500,18500,0.45,0.35,0.16,0.18,28.5,180,Yes,2500,8500,Medium,Low,7,8,12.8,Medium,8.5,Positive,1
+28,2011,UB Group,Kingfisher Airlines,Aviation,7500,12000,3500,Merger,No,8500,2500,1.25,1.85,0.02,-0.15,0,45,No,5000,8500,Medium,Medium,4,3,8.5,High,7.2,Positive,0
+29,2011,Bajaj Auto,KTM,Automotive,450,18500,850,Investment,Yes,58000,2500,0.25,0.38,0.22,0.16,0,60,No,12000,1500,Low,Medium,7,8,5.8,Medium,8.2,Positive,1
+30,2011,Vedanta,Cairn India,Oil & Gas,12500,28500,8500,Acquisition,Yes,85000,28500,0.65,0.35,0.14,0.18,58.5,240,Yes,18500,8500,Medium,Low,6,8,18.5,Medium,8.2,Positive,1
+31,2012,Tata Consultancy Services,Diligenta,IT Services,680,58000,180,Acquisition,Yes,185000,220,0.08,0.15,0.28,0.22,125.5,65,No,280000,1500,Low,Medium,8,9,2.8,Low,6.5,Neutral,1
+32,2012,Maruti Suzuki,True Value,Automotive,250,35000,125,Acquisition,No,95000,85,0.18,0.28,0.25,0.18,68.2,55,No,12000,450,High,Low,7,8,58.5,Medium,4.8,Positive,1
+33,2012,Tata Steel,NatSteel Asia,Steel,1850,15000,2500,Acquisition,Yes,45000,4500,0.45,0.55,0.12,0.1,45.8,120,Yes,25000,5500,Low,Medium,6,7,18.5,Medium,4.8,Positive,1
+34,2013,Sun Pharma,Ranbaxy,Pharmaceuticals,3200,12500,8500,Acquisition,No,85000,12000,0.22,0.45,0.18,0.12,15.8,180,Yes,18000,14000,Medium,Medium,6,7,25.8,High,7.1,Positive,1
+35,2013,Godrej Consumer,Strength of Nature,FMCG,185,4500,85,Acquisition,Yes,25000,125,0.28,0.35,0.19,0.14,125.8,75,No,8500,285,Low,Low,7,6,2.5,Low,6.8,Positive,1
+36,2013,Larsen & Toubro,AREVA T&D,Infrastructure,1250,85000,2500,Acquisition,Yes,185000,4500,0.35,0.45,0.16,0.12,85.2,150,Yes,125000,8500,Medium,Medium,7,8,8.5,Medium,7.1,Positive,1
+37,2014,Abbott,Piramal Healthcare,Pharmaceuticals,2850,8500,4500,Acquisition,Yes,28500,12500,0.25,0.35,0.2,0.16,58.5,120,Yes,28500,12500,Medium,Medium,7,8,18.5,Medium,7.1,Positive,1
+38,2014,Mahindra,Jiangling Motors,Automotive,520,28000,1850,Joint Venture,Yes,85000,4500,0.45,0.55,0.18,0.14,0,90,No,125000,12500,Low,Medium,6,7,2.8,Medium,7.1,Positive,1
+39,2015,Flipkart,Myntra,E-commerce,2000,1200,450,Acquisition,No,15000,1200,0.85,0.95,0.05,0.08,125,30,No,8000,2500,High,High,7,8,35.2,High,7.8,Positive,1
+40,2015,Shoppers Stop,Crossword Bookstores,Retail,65,1850,125,Acquisition,No,2500,85,0.65,0.85,0.08,0.02,28.5,30,No,8500,450,High,Low,6,5,8.5,Medium,7.5,Positive,0
+41,2015,Microsoft,LinkedIn India,Technology,850,125000,285,Acquisition,Yes,1250000,850,0.15,0.25,0.28,0.22,225.8,90,No,185000,1200,Low,High,8,9,5.2,Medium,7.8,Positive,1
+42,2016,Ola Cabs,TaxiForSure,Transportation,200,850,125,Acquisition,No,4500,250,1.25,1.45,-0.25,-0.18,85.5,25,No,3500,1200,High,High,6,7,65.8,High,8.2,Positive,1
+43,2016,JSW Steel,Ispat Industries,Steel,1350,28500,4500,Acquisition,No,85000,2500,0.65,0.95,0.14,0.08,125.8,150,Yes,28500,8500,Medium,Low,6,7,22.5,High,8.2,Positive,1
+44,2016,Reliance Jio,Haptik,Technology,185,285000,25,Acquisition,No,1250000,85,0.38,0.65,0.22,0.15,585.2,45,No,185000,285,Low,High,8,9,1.2,High,8.2,Positive,1
+45,2017,Paytm,FreeCharge,Fintech,385,1500,85,Acquisition,No,8500,150,0.95,1.15,-0.15,-0.22,125.8,40,No,5000,250,Medium,High,5,6,18.5,High,7.5,Positive,0
+46,2017,Hero MotoCorp,Ather Energy,Automotive,185,28500,25,Investment,No,85000,185,0.18,2.85,0.25,-0.85,0,45,No,18500,285,Low,High,8,7,0.2,High,7.8,Positive,1
+47,2017,L&T Technology,Mindtree,IT Services,1850,12500,4500,Acquisition,No,85000,18500,0.28,0.22,0.18,0.2,25.8,120,No,125000,18500,Medium,Medium,7,8,8.5,Medium,7.5,Positive,1
+48,2018,Walmart,Flipkart,E-commerce,129000,35000,12500,Acquisition,Yes,285000,85000,0.35,0.85,0.22,0.05,580.5,240,Yes,12000,85000,Medium,High,6,9,42.8,High,7.2,Positive,1
+49,2018,Bain Capital,Axis Bank Cards,Banking,2850,125000,2500,Investment,Yes,650000,8500,0.12,0.35,0.18,0.16,0,90,Yes,95000,8500,Medium,Medium,7,8,12.8,Medium,7.2,Positive,1
+50,2018,ITC,Sunrise Foods,FMCG,1850,42500,850,Acquisition,No,285000,1200,0.25,0.45,0.19,0.14,125.8,75,No,28500,2500,High,Low,8,8,28.5,Medium,7.2,Positive,1
+51,2019,HDFC Bank,HDFC Ltd,Banking,125000,125000,58000,Merger,No,650000,285000,0.12,0.18,0.18,0.16,8.5,365,Yes,95000,12000,High,Medium,9,9,28.5,Medium,5.8,Positive,1
+52,2019,Facebook,Jio Platforms,Technology,43574,28500,65000,Investment,Yes,1250000,425000,0.25,0.45,0.28,0.22,12.5,180,No,58000,85000,Low,High,7,9,15.8,Medium,3.5,Negative,1
+53,2019,Byju's,Aakash Educational,EdTech,7500,2500,850,Acquisition,No,125000,2500,0.85,0.45,-0.12,0.18,585.2,120,No,5500,8500,Medium,Medium,6,8,32.5,High,6.8,Positive,0
+54,2019,Amazon,More Retail,E-commerce,285,185000,1850,Acquisition,Yes,1250000,2500,0.35,0.75,0.25,0.08,28.5,60,No,185000,18500,Medium,Medium,7,8,8.5,High,6.8,Positive,1
+55,2020,Reliance Retail,Future Retail,Retail,24500,225000,28500,Acquisition,No,1850000,12500,0.38,0.95,0.19,0.05,125.8,180,Yes,285000,45000,High,Medium,6,8,45.2,High,3.5,Negative,0
+56,2020,Axis Bank,Citibank India,Banking,12500,185000,8500,Acquisition,Yes,650000,28500,0.15,0.22,0.16,0.14,85.2,240,Yes,85000,12500,High,Medium,7,8,18.5,Medium,3.5,Negative,1
+57,2020,Tata Digital,1mg,Healthcare,450,8500,185,Acquisition,No,125000,850,0.45,0.65,0.12,0.15,185.2,75,No,12000,1850,Medium,High,7,8,12.8,High,3.5,Negative,1
+58,2021,Zomato,Blinkit,Food Delivery,4447,2200,650,Acquisition,No,58000,2500,0.85,1.25,-0.18,-0.35,285.5,120,No,5500,2800,High,Medium,6,7,48.5,High,8.9,Positive,1
+59,2021,Nykaa,FSN E-Commerce,Beauty,5200,2200,1850,IPO,No,125000,85000,0.25,0.35,0.15,0.12,0,180,Yes,2500,1850,High,Medium,8,8,18.5,Medium,12.5,Positive,1
+60,2021,PolicyBazaar,Docprime,Insurance,185,2850,45,Acquisition,No,45000,125,0.55,0.95,0.12,0.05,285.5,60,No,2500,285,Medium,Medium,7,7,8.5,Medium,8.9,Positive,1
+61,2021,Ebix,Yatra,Travel,2850,1850,285,Acquisition,Yes,18500,1200,0.65,1.15,0.15,-0.08,485.2,90,No,2500,1850,Medium,Medium,6,6,25.8,Medium,8.9,Positive,1
+62,2022,Adani Group,Ambuja Cements,Cement,20500,185000,25000,Acquisition,No,1250000,85000,0.65,0.35,0.15,0.18,28.5,150,Yes,45000,8500,Medium,Low,7,8,18.5,High,7.1,Positive,1
+63,2022,Tata Steel,Neelachal Ispat,Steel,9500,15000,2500,Acquisition,No,45000,4500,0.45,0.85,0.12,0.08,285.2,120,Yes,25000,4500,Medium,Low,6,7,22.5,Medium,7.1,Positive,1
+64,2022,OYO,Innov8,Hospitality,1850,4500,285,Acquisition,No,28500,850,0.95,1.25,-0.08,0.05,485.2,45,No,18500,1200,High,Medium,6,7,18.5,High,7.1,Positive,1
+65,2022,Cisco,CloudCherry,Technology,285,485000,85,Acquisition,Yes,4250000,185,0.15,0.45,0.28,0.18,285.5,60,No,285000,285,Low,High,8,9,1.2,Medium,7.1,Positive,1
+66,2023,Tata Digital,BigBasket,E-commerce,9500,8500,2800,Acquisition,No,125000,8500,0.45,0.85,0.12,0.08,185.2,90,No,12000,15000,High,High,8,8,25.8,High,6.8,Positive,1
+67,2023,LIC,IDBI Bank,Banking,9500,485000,12500,Acquisition,No,6500000,18500,0.05,0.25,0.12,0.08,0,365,Yes,125000,18500,High,Low,9,7,8.5,Low,6.2,Positive,1
+68,2023,Reliance-Disney,Star India,Media,65000,650000,28500,Merger,Yes,1850000,125000,0.38,0.45,0.19,0.16,58.5,240,Yes,485000,28500,Medium,High,7,9,42.8,High,6.8,Positive,1
+69,2023,PhonePe,Wealthdesk,Fintech,285,12500,125,Acquisition,No,185000,450,0.25,0.65,0.28,0.15,125.8,60,No,8500,485,Medium,High,8,8,12.8,Medium,6.8,Positive,1
+70,2024,HDFC Bank,Payzapp,Fintech,1200,185000,285,Acquisition,No,1250000,850,0.12,0.65,0.19,0.08,325.8,85,No,125000,1200,Medium,High,8,9,8.5,Medium,7.2,Positive,1
+71,2024,Jio Platforms,Haptik,AI Technology,230,85000,125,Acquisition,No,850000,285,0.45,0.85,0.22,-0.15,185.2,60,No,45000,285,Low,High,7,8,2.8,High,7.2,Positive,1
+72,2024,Tata Group,Air India Express,Aviation,2850,285000,4500,Acquisition,No,1850000,8500,0.35,0.95,0.16,0.05,58.5,180,Yes,485000,8500,High,Medium,6,7,28.5,High,7.2,Positive,1
+73,2024,Swiggy,Dineout,Food Delivery,200,8500,185,Acquisition,No,85000,450,0.85,0.95,-0.08,0.02,125.8,75,No,12500,850,High,Medium,7,8,58.5,High,7.2,Positive,1
+74,2024,Bajaj Group,Bajaj Allianz,Insurance,22500,125000,28500,Acquisition,No,650000,125000,0.25,0.18,0.2,0.18,25.8,150,Yes,85000,28500,High,Low,8,9,32.5,Medium,7.2,Positive,1
+75,2024,Adani Group,ACC Cement,Cement,6700,185000,18500,Acquisition,No,1250000,45000,0.65,0.35,0.15,0.16,28.5,120,Yes,45000,12500,Medium,Low,7,8,22.5,High,7.2,Positive,1
+76,2024,Larsen & Toubro,Mindtree,IT Services,9500,165000,18500,Acquisition,No,285000,85000,0.28,0.22,0.18,0.2,12.5,90,No,485000,28500,Medium,Medium,8,9,12.8,Medium,7.2,Positive,1
+77,2024,JSW Group,Ispat Corp,Steel,2850,125000,8500,Acquisition,No,485000,18500,0.65,0.75,0.14,0.1,58.5,105,Yes,185000,12500,Medium,Low,6,7,28.5,High,7.2,Positive,1
+78,2024,Reliance Industries,Netmeds,Healthcare,620,650000,450,Acquisition,No,1850000,1200,0.38,0.85,0.19,0.08,85.2,60,No,485000,2500,Medium,Medium,7,8,15.8,Medium,7.2,Positive,1
+79,2024,Vedanta,Hindustan Zinc,Mining,8500,125000,28500,Acquisition,No,485000,125000,0.65,0.45,0.14,0.16,22.5,135,Yes,85000,18500,Medium,Low,7,8,18.5,Medium,7.2,Positive,1
+80,2024,Wipro,Capco,IT Services,1050,85000,1850,Acquisition,Yes,485000,4500,0.12,0.25,0.24,0.22,125.8,75,No,245000,8500,Low,High,8,9,5.8,Low,7.2,Positive,1
+81,2024,Mahindra Group,Ford India,Automotive,2500,185000,4500,Acquisition,Yes,650000,12500,0.45,0.85,0.18,0.06,125.8,150,Yes,285000,8500,Medium,Medium,6,7,12.8,High,7.2,Positive,1
+82,2024,Infosys,Oddity,IT Services,450,185000,285,Acquisition,Yes,1250000,850,0.08,0.18,0.28,0.25,185.2,60,No,345000,1200,Low,High,8,9,3.2,Low,7.2,Positive,1
+83,2024,ICICI Bank,Kisan Credit Card,Banking,1850,285000,2500,Acquisition,No,1250000,8500,0.15,0.35,0.16,0.14,45.8,90,Yes,125000,8500,High,Medium,8,8,28.5,Medium,7.2,Positive,1
+84,2024,Godrej Industries,Creamline Dairy,FMCG,1200,28500,1850,Acquisition,No,125000,4500,0.28,0.45,0.19,0.16,85.2,75,No,28500,4500,High,Low,7,8,18.5,Medium,7.2,Positive,1
+85,2024,Asian Paints,Sleek International,Paints,450,28500,850,Acquisition,No,285000,2500,0.22,0.35,0.21,0.18,58.5,60,No,28500,2500,High,Low,8,8,32.5,Medium,7.2,Positive,1
+86,2024,Hero MotoCorp,Gogoro,Automotive,850,45000,285,Investment,Yes,285000,1200,0.18,0.95,0.25,-0.15,0,75,No,28500,850,Low,High,7,7,2.8,High,7.2,Positive,1
+87,2024,Bharti Airtel,OneWeb,Telecom,1650,125000,485,Investment,Yes,485000,2500,0.42,0.85,0.19,0.08,0,90,Yes,185000,1200,Low,High,7,8,8.5,Medium,7.2,Positive,1
+88,2024,Sun Pharma,Alkaloida,Pharmaceuticals,285,28500,450,Acquisition,Yes,185000,1200,0.22,0.35,0.18,0.15,58.5,105,Yes,28500,1850,Low,Medium,7,7,12.8,Medium,7.2,Positive,1
+89,2024,Tech Mahindra,Altiostar,Technology,450,58500,285,Acquisition,Yes,285000,850,0.38,0.65,0.18,0.12,185.2,60,No,185000,1200,Low,High,7,8,5.8,Medium,7.2,Positive,1
+90,2024,Marico,Beardo,FMCG,95,8500,125,Acquisition,No,45000,285,0.28,0.55,0.19,0.15,25.8,45,No,8500,285,High,Low,8,7,8.5,Medium,7.2,Positive,1
+91,2025,Mahindra Electric,Reva 2.0,Automotive,450,45000,125,Acquisition,No,185000,285,0.38,0.85,0.18,-0.12,285.5,90,No,85000,450,Medium,High,7,8,5.8,Medium,6.8,Positive,1
+92,2025,Ola Electric,Ather Pro,EV Technology,850,8500,285,Acquisition,No,45000,1200,1.25,1.85,-0.15,-0.25,225.8,120,No,5500,1200,High,High,6,7,18.5,High,6.8,Positive,0
+93,2025,Zerodha,Smallcase Technologies,Fintech,300,2500,185,Acquisition,No,25000,850,0.15,0.45,0.35,0.22,85.2,60,No,2800,285,Medium,High,8,9,22.5,Medium,6.8,Positive,1
+94,2025,Razorpay,Thirdwatch,Fintech,125,5500,45,Acquisition,No,85000,125,0.35,0.85,0.25,0.08,185.5,45,No,4500,185,Low,High,7,8,8.2,High,6.8,Positive,1
+95,2025,Dream11,Mobile Premier League,Gaming,2200,1850,850,Acquisition,No,18500,4500,0.65,0.95,-0.05,0.12,125.8,90,No,1200,2500,High,High,6,7,42.8,High,6.8,Positive,1
+96,2025,Flipkart,Cleartrip,Travel,385,95000,450,Acquisition,No,650000,1200,0.85,0.75,0.05,0.08,185.2,75,No,125000,850,Medium,Medium,7,8,15.8,Medium,6.8,Positive,1
+97,2025,Paytm,Insider.in,Events,85,8500,65,Acquisition,No,125000,185,0.95,1.15,-0.18,0.05,125.8,30,No,12500,285,Medium,Low,6,6,5.2,Medium,6.8,Positive,0
+98,2025,Byju's,Great Learning,EdTech,600,4500,285,Acquisition,No,85000,1200,1.85,0.65,-0.35,0.15,125.2,120,No,8500,1850,Medium,Medium,5,7,28.5,High,6.8,Positive,0
+99,2025,Nykaa,Purplle,Beauty E-commerce,485,4200,185,Acquisition,No,185000,850,0.45,0.85,0.18,0.08,185.8,90,No,4500,650,High,High,7,8,45.2,High,6.8,Positive,1
+100,2025,Zomato,Magicpin,Hyperlocal,280,12500,125,Acquisition,No,125000,450,0.85,1.25,-0.12,-0.08,185.5,60,No,8500,485,High,Medium,6,7,32.8,High,6.8,Positive,0
+101,2025,PolicyBazaar,Coverfox,Insurance,350,2850,185,Acquisition,No,45000,650,0.55,0.75,0.12,0.08,125.8,75,No,2500,485,High,Medium,7,8,28.5,Medium,6.8,Positive,1
+102,2025,Lenskart,Coolwinks,Eyewear,185,1850,125,Acquisition,No,18500,285,0.65,0.85,0.15,0.12,85.2,45,No,4500,285,High,Low,8,7,58.2,Medium,6.8,Positive,1
+103,2025,UrbanCompany,HouseJoy,Home Services,95,1200,85,Acquisition,No,12500,185,0.95,1.15,-0.08,0.02,125.8,30,No,8500,450,High,High,6,6,18.5,High,6.8,Positive,0
+104,2025,Meesho,Shop101,Social Commerce,125,2500,65,Acquisition,No,45000,125,0.85,1.25,-0.15,-0.25,225.8,60,No,4500,185,High,High,5,6,25.8,High,6.8,Positive,0
+105,2025,Pine Labs,Setu,Fintech,150,4500,85,Acquisition,No,185000,285,0.25,0.65,0.22,0.18,95.2,45,No,5500,285,Medium,High,8,9,8.5,Medium,6.8,Positive,1
+106,2025,CarDekho,Rupyy,Fintech,85,1850,45,Acquisition,No,12500,125,0.65,0.95,0.12,0.08,125.8,30,No,2500,185,Medium,Medium,7,7,12.8,Medium,6.8,Positive,1
+107,2025,Delhivery,Ecom Express,Logistics,2500,8500,2850,Acquisition,No,85000,12500,0.85,0.75,0.08,0.12,25.8,90,No,28500,12500,High,High,7,8,52.5,High,6.8,Positive,1
+108,2025,Grofers,Milkbasket,E-commerce,185,2500,185,Acquisition,No,18500,450,0.95,1.15,-0.08,0.02,85.2,45,No,4500,850,High,Medium,6,7,18.5,High,6.8,Positive,0
+109,2025,Swiggy,Scootsy,Food Delivery,125,8500,85,Acquisition,No,85000,185,0.85,1.25,-0.08,-0.05,85.2,30,No,12500,285,High,Medium,7,7,62.8,High,6.8,Positive,1
+110,2025,BigBasket,DailyNinja,E-commerce,95,2800,65,Acquisition,No,8500,125,0.85,0.95,0.08,0.05,85.2,30,No,15000,185,High,Medium,7,7,28.5,High,6.8,Positive,1
+111,2025,MakeMyTrip,RailYatri,Travel,285,4500,125,Acquisition,No,28500,450,0.45,0.65,0.15,0.12,125.8,60,No,8500,485,Medium,Medium,7,8,18.5,Medium,6.8,Positive,1
+112,2025,BookMyShow,Townscript,Entertainment,125,1850,85,Acquisition,No,12500,285,0.65,0.85,0.12,0.1,85.2,45,No,2500,285,High,Medium,7,7,32.5,Medium,6.8,Positive,1
+113,2025,Dunzo,Shadowfax,Logistics,185,450,285,Acquisition,No,2500,850,1.85,1.45,-0.25,-0.18,28.5,60,No,1200,1850,High,High,5,6,45.2,High,6.8,Positive,0
+114,2025,Urban Ladder,Pepperfry,Furniture,450,850,650,Merger,No,4500,2500,1.25,1.15,-0.08,-0.05,0,75,No,2500,2800,High,Medium,6,6,38.5,High,6.8,Positive,0
+115,2025,Practo,DocsApp,Healthcare,185,1200,125,Acquisition,No,8500,450,0.95,1.05,-0.12,0.02,85.2,45,No,4500,485,Medium,High,6,7,25.8,Medium,6.8,Positive,0
+116,2025,Pharmeasy,1mg,Healthcare,2850,2500,450,Merger,No,18500,1850,0.85,0.75,-0.05,0.08,0,120,No,8500,2500,High,Medium,6,7,42.8,High,6.8,Positive,0
+117,2025,Unacademy,Vedantu,EdTech,1850,1850,850,Merger,No,12500,4500,1.25,1.35,-0.18,-0.22,0,90,No,4500,2500,High,High,5,6,52.5,High,6.8,Positive,0
+118,2025,CRED,KreditBee,Fintech,850,485,285,Acquisition,No,8500,1200,0.65,1.15,0.05,-0.08,225.8,75,No,1200,850,Medium,High,6,7,18.5,High,6.8,Positive,0
+119,2025,PharmEasy,Netmeds,Healthcare,1200,2500,450,Acquisition,No,18500,1200,0.85,0.85,-0.05,0.08,185.2,90,No,8500,2500,High,Medium,6,7,38.5,High,6.8,Positive,0
+120,2025,Rebel Foods,Faasos,Food Delivery,285,850,185,Acquisition,No,4500,450,1.15,1.25,-0.12,-0.08,85.2,60,No,2500,850,High,Medium,6,7,25.8,High,6.8,Positive,0
+121,2004,TCS,CMC Limited,IT Services,520,18500,1850,Acquisition,No,125000,4500,0.08,0.25,0.28,0.18,45.8,90,No,85000,12500,Medium,Medium,8,8,8.5,Low,6.8,Positive,1
+122,2004,Bharti,Airtel Cellular,Telecom,1850,18000,850,Acquisition,No,42000,2500,0.42,0.55,0.19,0.15,125.8,75,Yes,25000,4500,High,Medium,7,8,22.5,Medium,6.8,Positive,1
+123,2005,ICICI Bank,ITC Classic Finance,Banking,285,12000,185,Acquisition,No,18000,450,0.15,0.35,0.15,0.12,85.2,60,Yes,15000,850,High,Low,8,7,18.5,Medium,7.8,Positive,1
+124,2005,Dr Reddy's,Cheminor Drugs,Pharmaceuticals,450,4500,285,Acquisition,No,18500,850,0.28,0.45,0.18,0.14,125.8,90,Yes,12500,1200,Medium,Medium,7,7,12.8,Medium,7.8,Positive,1
+125,2006,Reliance,Infotel,Telecom,4800,85000,150,Acquisition,No,125000,285,0.38,0.65,0.18,0.08,1850.2,60,No,45000,485,Low,High,7,9,2.8,High,8.8,Positive,1
+126,2006,Mahindra,Scorpio Auto,Automotive,285,28000,185,Acquisition,No,85000,450,0.45,0.65,0.18,0.12,85.2,45,No,125000,850,Medium,Low,7,7,5.8,Medium,8.8,Positive,1
+127,2007,Aditya Birla,Novelis,Metals,6500,28500,12500,Acquisition,Yes,85000,28500,0.55,0.65,0.14,0.11,58.5,150,Yes,85000,28500,Low,Medium,6,7,18.5,High,8.5,Positive,1
+128,2007,ONGC,Imperial Energy,Oil & Gas,1850,125000,2500,Acquisition,Yes,285000,8500,0.35,0.55,0.16,0.12,125.8,120,Yes,32000,4500,Low,Low,6,7,12.8,Medium,8.5,Positive,1
+129,2008,Hindalco,Novelis Inc,Metals,4500,18500,12500,Acquisition,Yes,45000,28500,0.65,0.75,0.12,0.1,28.5,180,Yes,28500,28500,Low,Medium,5,7,22.5,High,2.8,Negative,0
+130,2008,Indian Hotels,Orient Express,Hospitality,1200,4500,850,Acquisition,Yes,18500,2500,0.45,0.55,0.14,0.12,85.2,120,Yes,12500,4500,Low,Low,6,6,8.5,Medium,2.8,Negative,1
+131,2009,Bharti Airtel,Warid Telecom,Telecom,285,28500,450,Acquisition,Yes,85000,1200,0.42,0.85,0.19,0.08,58.5,90,Yes,25000,2500,Low,Medium,6,7,12.8,Medium,4.5,Negative,1
+132,2009,Tata Power,Powerlinks Transmission,Power,850,18500,285,Acquisition,No,85000,850,0.55,0.45,0.14,0.16,225.8,75,Yes,18500,1200,Medium,Low,7,8,8.5,Medium,4.5,Negative,1
+133,2010,Bharti Airtel,Zain Africa Operations,Telecom,8500,28500,4500,Acquisition,Yes,85000,12500,0.42,0.55,0.19,0.11,85.2,240,Yes,25000,8500,Low,Medium,6,7,22.5,High,8.5,Positive,1
+134,2010,Reliance Industries,Shale Gas Assets,Oil & Gas,1200,285000,485,Investment,Yes,1250000,1850,0.38,0.65,0.18,0.15,0,120,Yes,485000,1200,Low,Low,7,8,2.8,Medium,8.5,Positive,1
+135,2011,Aditya Birla Nuvo,Columbian Chemicals,Chemicals,850,12500,2500,Acquisition,Yes,45000,8500,0.55,0.45,0.16,0.14,28.5,135,Yes,28500,8500,Low,Medium,7,7,12.8,Medium,8.2,Positive,1
+136,2011,JSW Steel,JSW Ispat Steel,Steel,2500,28500,4500,Acquisition,No,85000,8500,0.65,0.85,0.14,0.1,45.8,90,Yes,28500,12500,High,Low,7,8,32.5,High,8.2,Positive,1
+137,2012,Bharti Airtel,Qualcomm Ventures,Telecom,185,28500,125,Investment,Yes,85000,285,0.42,0.25,0.19,0.22,0,45,No,25000,485,Low,High,7,8,18.5,Medium,4.8,Positive,1
+138,2012,Mahindra,Reva Electric Car,Automotive,25,28000,15,Acquisition,No,85000,25,0.45,0.85,0.18,-0.25,158.5,45,No,125000,285,Medium,High,6,4,0.8,Medium,4.8,Positive,0
+139,2013,Cipla,Medpro Pharmaceuticals,Pharmaceuticals,450,12500,285,Acquisition,Yes,85000,850,0.22,0.35,0.18,0.15,185.2,105,Yes,18000,1200,Low,Medium,7,7,8.5,Medium,7.1,Positive,1
+140,2013,Lupin,GAVIS Pharmaceuticals,Pharmaceuticals,850,8500,485,Acquisition,Yes,45000,1200,0.25,0.28,0.2,0.18,95.2,90,Yes,12500,1850,Low,Medium,7,8,12.8,Medium,7.1,Positive,1
+141,2014,Mahindra,Peugeot Motorcycles,Automotive,285,28000,185,Joint Venture,Yes,85000,450,0.45,0.55,0.18,0.14,0,75,No,125000,850,Low,Medium,6,7,2.8,Medium,7.1,Positive,1
+142,2014,Tata Motors,Hispano Carrocera,Automotive,185,28000,125,Acquisition,Yes,32000,285,0.55,0.65,0.14,0.12,85.2,60,Yes,35000,450,Low,Low,6,6,5.8,Medium,7.1,Positive,1
+143,2015,Bharti Airtel,Aircel Assam,Telecom,450,28500,185,Acquisition,No,85000,450,0.42,0.85,0.19,0.08,185.2,75,Yes,25000,850,High,Medium,7,7,22.5,Medium,7.8,Positive,1
+144,2015,Asian Paints,SCIB Paints,Paints,285,28500,450,Acquisition,Yes,285000,1200,0.22,0.35,0.21,0.18,58.5,90,No,28500,1850,Medium,Low,8,8,28.5,Medium,7.8,Positive,1
+145,2016,Reliance Jio,Den Networks,Telecom,2850,285000,1850,Acquisition,No,1250000,4500,0.38,0.95,0.22,0.05,85.2,120,Yes,185000,8500,Medium,Medium,6,7,18.5,High,8.2,Positive,1
+146,2016,Sun Pharma,Taro Pharmaceutical,Pharmaceuticals,1850,12500,2500,Acquisition,Yes,85000,8500,0.22,0.28,0.18,0.16,25.8,135,Yes,18000,4500,Low,Medium,7,8,18.5,Medium,8.2,Positive,1
+147,2017,Flipkart,eBay India,E-commerce,1200,12500,450,Acquisition,Yes,85000,1850,0.85,0.65,0.05,0.08,185.2,90,No,85000,2500,High,High,6,8,45.2,High,7.5,Positive,1
+148,2017,Oyo,Zostel,Hospitality,45,1200,85,Acquisition,No,12500,185,0.95,1.15,-0.08,0.02,28.5,30,No,8500,285,High,Medium,6,6,18.5,High,7.5,Positive,0
+149,2018,Paytm,Paytm Payments Bank,Fintech,2850,1500,125,Spinoff,No,8500,450,0.95,0.25,-0.15,0.18,0,90,Yes,5000,485,High,High,8,8,12.8,High,7.2,Positive,1
+150,2018,HDFC Bank,Apollo Munich Health,Banking,1350,125000,850,Acquisition,No,650000,2500,0.12,0.35,0.18,0.16,185.2,120,Yes,95000,2500,Medium,Medium,8,8,18.5,Medium,7.2,Positive,1
+151,2019,Mahindra,SsangYong Motor,Automotive,450,185000,1850,Investment,Yes,650000,4500,0.45,1.25,0.18,-0.08,0,135,Yes,285000,8500,Low,Medium,5,6,2.8,Medium,5.8,Positive,0
+152,2019,Reliance Retail,Hamleys,Retail,620,225000,285,Acquisition,Yes,1850000,850,0.38,0.65,0.19,0.12,525.8,75,No,285000,1200,Medium,Low,7,7,8.5,Medium,5.8,Positive,1
+153,2020,Jio Platforms,Saavn,Music Streaming,1000,85000,185,Acquisition,Yes,850000,450,0.45,0.85,0.22,0.08,425.8,60,No,45000,485,Low,High,7,8,52.5,High,3.5,Negative,1
+154,2020,Tata Sons,BigBasket,E-commerce,9500,285000,2800,Investment,No,1850000,8500,0.35,0.85,0.16,0.08,0,120,No,485000,15000,Medium,High,8,9,22.5,High,3.5,Negative,1
+155,2020,Mukesh Ambani,Network18,Media,4500,650000,1850,Acquisition,No,1850000,8500,0.38,0.65,0.19,0.12,185.2,90,Yes,485000,8500,Medium,Medium,7,8,18.5,Medium,3.5,Negative,1
+156,2021,Tata Steel,Thyssenkrupp Steel,Steel,4500,15000,8500,Joint Venture,Yes,45000,18500,0.45,0.65,0.12,0.08,0,180,Yes,25000,28500,Low,Medium,6,7,22.5,High,8.9,Positive,1
+157,2021,Amazon,MX Player,OTT,2850,185000,450,Acquisition,Yes,1250000,1200,0.35,0.85,0.25,0.08,485.2,75,No,185000,1850,Low,High,7,8,32.5,High,8.9,Positive,1
+158,2021,Bajaj Finserv,Bajaj Allianz General,Insurance,6500,85000,18500,Acquisition,No,485000,85000,0.25,0.18,0.2,0.18,28.5,135,Yes,85000,18500,High,Low,8,9,28.5,Medium,8.9,Positive,1
+159,2021,Adani Ports,Gangavaram Port,Logistics,2850,18500,1200,Acquisition,No,285000,4500,0.65,0.45,0.15,0.16,185.2,120,Yes,12500,2500,Medium,Low,7,8,18.5,High,8.9,Positive,1
+160,2021,JSW Group,Bhushan Power,Steel,19350,125000,8500,Acquisition,No,485000,18500,0.65,0.95,0.14,0.05,125.8,180,Yes,185000,12500,Medium,Low,6,7,28.5,High,8.9,Positive,1
+161,2022,Reliance Industries,Strand Life Sciences,Healthcare,285,650000,125,Acquisition,No,1850000,450,0.38,0.65,0.19,0.15,125.8,60,No,485000,485,Low,High,7,8,2.8,Medium,7.1,Positive,1
+162,2022,Tata Consultancy Services,Postbank Systems,IT Services,450,185000,285,Acquisition,Yes,1250000,850,0.08,0.25,0.28,0.22,185.2,75,No,485000,1200,Low,High,8,9,3.2,Low,7.1,Positive,1
+163,2022,Mahindra Group,Automobili Pininfarina,Automotive,285,185000,185,Investment,Yes,650000,450,0.45,0.85,0.18,0.12,0,90,No,285000,485,Low,High,7,7,1.8,High,7.1,Positive,1
+164,2022,HDFC AMC,Quantum AMC,Asset Management,25,8500,185,Investment,No,85000,450,0.15,0.25,0.22,0.2,0,45,No,2500,485,Medium,Medium,8,8,8.5,Medium,7.1,Positive,1
+165,2022,Bharti Airtel,Telenor India,Telecom,0,125000,1850,Acquisition,Yes,485000,4500,0.42,0.85,0.19,0.08,0,120,Yes,185000,8500,High,Medium,6,7,22.5,Medium,7.1,Positive,1
+166,2023,Vedanta,Hindustan Zinc Expansion,Mining,4500,125000,12500,Expansion,No,485000,125000,0.65,0.45,0.14,0.16,0,90,Yes,85000,18500,High,Low,8,9,22.5,Medium,6.8,Positive,1
+167,2023,Infosys,BASE life science,IT Services,185,185000,125,Acquisition,Yes,1250000,285,0.08,0.18,0.28,0.25,85.2,60,No,345000,485,Low,High,8,9,2.8,Low,6.8,Positive,1
+168,2023,Asian Paints,Weatherseal,Paints,185,28500,125,Acquisition,No,285000,285,0.22,0.35,0.21,0.18,85.2,60,No,28500,485,High,Low,8,8,28.5,Medium,6.8,Positive,1
+169,2023,Godrej Properties,Ashwin Sheth Group,Real Estate,1200,8500,850,Acquisition,No,45000,2500,0.55,0.65,0.16,0.14,85.2,90,No,8500,2500,High,Low,7,7,18.5,High,6.8,Positive,1
+170,2023,Wipro,Rizing Intermediate Holdings,IT Services,540,85000,285,Acquisition,Yes,485000,850,0.12,0.25,0.24,0.22,125.8,75,No,245000,1200,Low,High,8,9,5.8,Low,6.8,Positive,1
+171,2024,Ultratech Cement,India Cements,Cement,3500,52500,8500,Acquisition,No,285000,18500,0.45,0.85,0.16,0.1,85.2,135,Yes,28500,8500,Medium,Low,6,7,32.5,High,7.2,Positive,1
+172,2024,Apollo Hospitals,CARE Hospitals,Healthcare,1350,18500,2850,Acquisition,No,85000,8500,0.35,0.55,0.18,0.15,58.5,120,Yes,85000,18500,Medium,Medium,7,8,25.8,Medium,7.2,Positive,1
+173,2024,Kotak Mahindra Bank,Sonata Finance,Banking,537,85000,450,Acquisition,No,485000,1200,0.18,0.45,0.19,0.16,125.8,90,Yes,85000,2500,Medium,Medium,8,8,18.5,Medium,7.2,Positive,1
+174,2024,Pidilite Industries,Huntsman Corporation India,Chemicals,285,12500,450,Acquisition,Yes,185000,1200,0.25,0.35,0.2,0.18,58.5,90,Yes,28500,1850,Medium,Medium,7,8,18.5,Medium,7.2,Positive,1
+175,2024,Titan Company,Taneira Jewelry,Jewelry,850,42500,285,Acquisition,No,285000,850,0.18,0.25,0.22,0.19,225.8,60,No,85000,1200,High,Low,8,8,52.5,Medium,7.2,Positive,1
+176,2024,Crompton Greaves,Butterfly Gandhimathi,Consumer Appliances,285,8500,450,Acquisition,No,28500,1200,0.35,0.45,0.18,0.16,58.5,75,No,12500,2500,Medium,Low,7,7,28.5,Medium,7.2,Positive,1
+177,2024,Emami,Dermicool,FMCG,185,4500,125,Acquisition,No,18500,285,0.28,0.45,0.19,0.16,85.2,45,No,8500,485,High,Low,8,7,18.5,Medium,7.2,Positive,1
+178,2024,Biocon,Viatris Biosimilars,Pharmaceuticals,2850,8500,1850,Acquisition,Yes,45000,4500,0.45,0.55,0.16,0.14,85.2,135,Yes,28500,8500,Low,Medium,6,7,22.5,Medium,7.2,Positive,1
+179,2024,Dixon Technologies,Transsion Holdings India,Electronics,450,12500,285,Joint Venture,Yes,85000,850,0.25,0.35,0.2,0.18,0,75,No,28500,1200,Medium,High,7,8,12.8,Medium,7.2,Positive,1
+180,2024,Dabur India,Badshah Masala,FMCG,588,12500,850,Acquisition,No,85000,2500,0.15,0.25,0.21,0.19,58.5,90,No,28500,4500,High,Low,8,8,32.5,Medium,7.2,Positive,1
+181,2025,Indigo,SpiceJet Routes,Aviation,2850,28500,4500,Acquisition,No,185000,8500,0.65,1.25,0.16,-0.08,58.5,150,Yes,28500,12500,High,Medium,5,6,52.5,High,6.8,Positive,0
+182,2025,Airtel,Vi Spectrum,Telecom,8500,125000,12500,Acquisition,No,485000,28500,0.42,0.95,0.19,0.05,58.5,180,Yes,185000,28500,High,Medium,6,7,65.2,High,6.8,Positive,1
+183,2025,SBI,Yes Bank Assets,Banking,2500,485000,18500,Acquisition,No,4250000,85000,0.08,0.45,0.14,0.08,28.5,240,Yes,285000,28500,High,Medium,7,8,28.5,Medium,6.8,Positive,1
+184,2025,ICICI Prudential,Bharti AXA General,Insurance,4200,28500,2850,Acquisition,No,285000,8500,0.18,0.35,0.18,0.16,85.2,135,Yes,28500,8500,High,Medium,8,8,32.5,Medium,6.8,Positive,1
+185,2025,Maruti Suzuki,MG Motor India,Automotive,8500,125000,8500,Acquisition,Yes,650000,28500,0.18,0.65,0.25,0.12,85.2,180,Yes,185000,8500,High,Medium,6,7,68.5,High,6.8,Positive,1
+186,2025,Mahindra Logistics,BlueDart Express,Logistics,4500,8500,4200,Acquisition,No,85000,28500,0.65,0.45,0.14,0.16,28.5,120,Yes,85000,28500,High,High,7,8,45.2,High,6.8,Positive,1
+187,2025,HCL Technologies,DXC Technology India,IT Services,2850,125000,4500,Acquisition,Yes,650000,18500,0.15,0.35,0.24,0.2,58.5,105,No,345000,28500,Medium,High,7,8,12.8,Medium,6.8,Positive,1
+188,2025,Bajaj Finance,DHFL Assets,NBFC,12500,28500,8500,Acquisition,No,485000,18500,0.35,0.95,0.22,0.05,85.2,180,Yes,85000,18500,High,Medium,6,7,42.5,High,6.8,Positive,1
+189,2025,Godrej Consumer,Hair & Care,FMCG,850,4500,285,Acquisition,No,25000,850,0.28,0.45,0.19,0.16,225.8,75,No,8500,1200,High,Low,8,7,28.5,Medium,6.8,Positive,1
+190,2025,L&T Infotech,Mindtree Merger,IT Services,0,18500,18500,Merger,No,185000,85000,0.15,0.22,0.24,0.2,0,180,No,85000,28500,High,High,8,9,22.5,Medium,6.8,Positive,1
+191,2025,Jio Financial,HDFC Credila,Financial Services,1850,8500,1200,Acquisition,No,85000,4500,0.45,0.25,0.18,0.2,85.2,90,Yes,28500,4500,Medium,Medium,7,8,18.5,Medium,6.8,Positive,1
+192,2025,Avenue Supermarts,More Supermarkets,Retail,4500,42500,2850,Acquisition,No,485000,8500,0.12,0.85,0.28,0.08,85.2,120,No,85000,28500,High,Medium,7,8,52.5,High,6.8,Positive,1
+193,2025,Nestle India,Maggi Noodles Expansion,FMCG,2850,18500,1850,Expansion,No,285000,8500,0.15,0.25,0.25,0.22,0,60,No,28500,8500,High,Low,9,9,65.2,Medium,6.8,Positive,1
+194,2025,Hindustan Zinc,Zinc India,Mining,1850,28500,1200,Acquisition,No,185000,4500,0.25,0.45,0.18,0.16,85.2,90,Yes,18500,4500,Medium,Low,7,8,22.5,Medium,6.8,Positive,1
+195,2025,Siemens India,C&S Electric,Infrastructure,850,18500,1200,Acquisition,No,185000,4500,0.18,0.35,0.22,0.19,58.5,105,Yes,28500,4500,Medium,Medium,7,8,18.5,Medium,6.8,Positive,1
+196,2025,Britannia Industries,Chipita India,FMCG,285,12500,185,Acquisition,Yes,185000,450,0.12,0.25,0.24,0.21,85.2,60,No,28500,850,Medium,Low,8,8,28.5,Medium,6.8,Positive,1
+197,2025,TVS Motor,Norton Motorcycles,Automotive,450,28500,185,Acquisition,Yes,185000,450,0.25,0.85,0.2,0.08,185.2,90,Yes,85000,850,Low,Medium,6,7,8.5,Medium,6.8,Positive,1
+198,2025,Dr Reddy's,Nicobrand,Pharmaceuticals,285,18500,125,Acquisition,Yes,185000,285,0.22,0.35,0.18,0.16,125.8,75,Yes,28500,485,Low,Medium,7,7,12.8,Medium,6.8,Positive,1
+199,2025,Motherson Sumi,Samvardhana Motherson,Automotive,2850,85000,4500,Merger,No,485000,28500,0.45,0.55,0.16,0.14,0,135,Yes,285000,85000,High,Medium,8,9,42.5,High,6.8,Positive,1
+200,2025,Power Grid Corporation,Sterlite Power,Power,8500,28500,4500,Acquisition,No,285000,18500,0.35,0.65,0.16,0.12,125.8,150,Yes,28500,12500,Medium,Medium,6,7,28.5,Medium,6.8,Positive,1

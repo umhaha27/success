@@ -1,0 +1,10 @@
+streamlit
+numpy
+cython
+pandas
+plotly
+statsmodels
+pmdarima
+reportlab
+kaleido
+joblib
