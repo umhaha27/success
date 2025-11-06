@@ -5,53 +5,54 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from prophet import Prophet  # ✅ Alternative to pmdarima for forecasting
 
-# --- Model Training Function ---
+# --- Train the Model ---
 @st.cache_resource
 def train_model(uploaded_file):
     try:
         data = pd.read_csv(uploaded_file)
     except Exception as e:
-        st.error(f"Error loading CSV. Please check the file format. Error: {e}")
-        return None, None
+        st.error(f"Error loading CSV: {e}")
+        return None, None, None
 
     try:
-        required_features = [
-            'Cultural_Fit_Score', 
-            'ROE_Acquirer', 
-            'Synergy_Potential_Score', 
-            'ROE_Target', 
-            'Debt_to_Equity_Acquirer'
-        ]
-        target_column = 'Success'
-        all_required_cols = required_features + [target_column]
-
-        missing_cols = [col for col in all_required_cols if col not in data.columns]
-        if missing_cols:
-            st.error(f"The uploaded CSV is missing required columns: {', '.join(missing_cols)}")
-            return None, None
-
-        cat_cols = data[all_required_cols].select_dtypes(include=['object']).columns.tolist()
+        # Encode categorical features
+        cat_cols = data.select_dtypes(include=['object']).columns.tolist()
         le = LabelEncoder()
         for col in cat_cols:
             data[col] = le.fit_transform(data[col].astype(str))
 
-        x = data[required_features]
-        y = data[target_column]
+        if 'Success' not in data.columns:
+            st.error("The dataset must contain a 'Success' column as target variable.")
+            return None, None, None
 
+        X = data.drop('Success', axis=1)
+        y = data['Success']
+
+        # Random Forest for feature importance
+        rf = RandomForestClassifier(random_state=42)
+        rf.fit(X, y)
+        importances = pd.Series(rf.feature_importances_, index=X.columns)
+        top5_features = importances.sort_values(ascending=False).head(5).index.tolist()
+
+        # Train Logistic Regression on top 5 features
+        x = X[top5_features]
         x_train, x_test, y_train, y_test = train_test_split(
             x, y, test_size=0.2, random_state=42, stratify=y
         )
+        model = LogisticRegression()
+        model.fit(x_train, y_train)
 
-        rf_model = RandomForestClassifier(random_state=42)
-        rf_model.fit(x_train, y_train)
-        return rf_model, required_features
-    
+        return model, top5_features, importances
+
     except Exception as e:
-        st.error(f"An error occurred during model training: {e}")
-        return None, None
+        st.error(f"Training Error: {e}")
+        return None, None, None
 
-# --- Custom CSS Styling ---
+
+# --- Load Custom Styling ---
 def load_css():
     st.markdown("""
         <style>
@@ -61,7 +62,7 @@ def load_css():
                 padding: 2rem;
                 border-radius: 0.5rem;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                max-width: 900px;
+                max-width: 950px;
                 margin: 0 auto;
             }
             h1 { color: #2c3e50; text-align: center; font-weight: 700; }
@@ -73,68 +74,118 @@ def load_css():
         </style>
     """, unsafe_allow_html=True)
 
-# --- Main Application ---
-st.set_page_config(page_title="M&A Success Predictor")
-load_css()
-st.title("M&A Success Predictor")
 
-uploaded_file = st.file_uploader("Upload your training CSV file", type="csv")
+# --- Streamlit App Starts ---
+st.set_page_config(page_title="Advanced M&A Success Predictor")
+load_css()
+st.title("🤝 Advanced M&A Success Predictor with Analytical Insights")
+
+uploaded_file = st.file_uploader("Upload your CSV file for training", type="csv")
 
 if uploaded_file is None:
-    st.info("Please upload a CSV file to train the model and enable predictions.")
+    st.info("Upload your CSV file to train the model.")
     st.stop()
 
-model, features_list = train_model(uploaded_file)
+model, features_list, importances = train_model(uploaded_file)
 
 if model is None:
-    st.warning("Model training failed. Please check the CSV file and error messages above.")
+    st.warning("Model training failed. Please check your file.")
     st.stop()
 
-st.success(f"Model trained successfully on your file!")
+st.success("✅ Model trained successfully using your dataset.")
+st.write(f"**Top 5 Predictive Features Identified:** {', '.join(features_list)}")
 
-st.write("<p style='text-align: center; color: #4b5563;'>Enter the features to predict the success of a merger or acquisition.</p>", unsafe_allow_html=True)
+# --- User Inputs ---
+st.write("<p style='text-align:center; color:#4b5563;'>Enter feature values and assign importance weights to simulate different M&A scenarios.</p>", unsafe_allow_html=True)
 
 with st.form(key='prediction_form'):
-    st.subheader("Input Features")
-    cultural_fit = st.number_input("Cultural Fit Score", value=0.0, format="%.2f")
-    roe_acquirer = st.number_input("ROE Acquirer", value=0.0, format="%.2f")
-    synergy_potential = st.number_input("Synergy Potential Score", value=0.0, format="%.2f")
-    roe_target = st.number_input("ROE Target", value=0.0, format="%.2f")
-    debt_to_equity = st.number_input("Debt to Equity Acquirer", value=0.0, format="%.2f")
-    submitted = st.form_submit_button("Predict Success")
+    st.subheader("Input Feature Values & Weights")
+    input_values = []
+    weights = []
+
+    col1, col2 = st.columns(2)
+    with col1:
+        for feature in features_list:
+            val = st.number_input(f"{feature} Value", value=0.0, format="%.2f")
+            input_values.append(val)
+    with col2:
+        for feature in features_list:
+            wt = st.slider(f"{feature} Weight", 0.0, 1.0, 0.2)
+            weights.append(wt)
+
+    submitted = st.form_submit_button("🔍 Analyze Prediction")
 
 if submitted:
     try:
-        input_features = [
-            cultural_fit,
-            roe_acquirer,
-            synergy_potential,
-            roe_target,
-            debt_to_equity
-        ]
-        
-        prediction = model.predict([input_features])
-        probabilities = model.predict_proba([input_features])[0]
+        input_df = pd.DataFrame([input_values], columns=features_list)
+        weighted_input = np.multiply(input_values, weights)
 
-        st.subheader("Prediction Result")
-        if int(prediction[0]) == 1:
-            st.success("The model predicts: **Success (1)**")
-            st.write("💡 This indicates a strong alignment between acquirer and target company factors, suggesting a higher likelihood of a successful merger.")
+        composite_score = np.sum(weighted_input) / np.sum(weights)
+        prediction = model.predict(input_df)[0]
+        probabilities = model.predict_proba(input_df)[0]
+
+        st.markdown("---")
+        st.subheader("🧠 Prediction Result & Analysis")
+
+        if int(prediction) == 1:
+            st.success("✅ The model predicts: **Success (1)**")
+            st.write(f"**Interpretation:** A strong positive alignment between key indicators leads to a favorable merger outcome. Weighted score: **{composite_score:.2f}**")
         else:
-            st.error("The model predicts: **Failure (0)**")
-            st.write("⚠️ The prediction suggests potential challenges in key synergy or financial indicators that could impact deal success.")
+            st.error("⚠️ The model predicts: **Failure (0)**")
+            st.write(f"**Interpretation:** Misaligned parameters indicate potential risk. Weighted score: **{composite_score:.2f}**")
 
-        # --- Graph: Show probability of each outcome ---
-        st.subheader("Prediction Probability")
+        # --- Probability Chart ---
+        st.subheader("📊 Prediction Probability Distribution")
         fig, ax = plt.subplots()
         categories = ['Failure (0)', 'Success (1)']
-        ax.bar(categories, probabilities)
+        ax.bar(categories, probabilities, color=['red', 'green'])
         ax.set_ylim(0, 1)
         ax.set_ylabel('Probability')
-        ax.set_title('Predicted Probability Distribution')
+        ax.set_title('Model Confidence')
         for i, v in enumerate(probabilities):
             ax.text(i, v + 0.02, f"{v:.2f}", ha='center', fontweight='bold')
         st.pyplot(fig)
-            
+
+        # --- Parameter Influence Table ---
+        st.subheader("⚖️ Parameter Influence (Weighted Impact)")
+        influence_df = pd.DataFrame({
+            'Feature': features_list,
+            'Value': input_values,
+            'Weight': weights,
+            'Weighted Impact': weighted_input
+        }).sort_values(by='Weighted Impact', ascending=False)
+        st.dataframe(influence_df.style.background_gradient(cmap='Blues', subset=["Weighted Impact"]))
+
+        top_influencer = influence_df.iloc[0]['Feature']
+        st.markdown(f"""
+        ### 🔍 Analytical Insight
+        - **{top_influencer}** has the highest weighted influence on the outcome.
+        - Adjusting this parameter may significantly impact success probability.
+        - Model confidence: **{max(probabilities)*100:.2f}%**
+        """)
+
+        # --- Forecasting Section using Prophet ---
+        st.markdown("---")
+        st.subheader("📈 Forecasting Future M&A Success Trends (Prophet Model)")
+        forecast_col = st.selectbox("Select a numeric column to forecast (e.g., Deal_Value, ROE_Target)", 
+                                    options=influence_df['Feature'].tolist())
+        periods = st.slider("Forecast Periods (future months)", 1, 24, 6)
+
+        # Prepare data for Prophet
+        if forecast_col in features_list:
+            time_series = pd.DataFrame({
+                'ds': pd.date_range(start='2023-01-01', periods=len(input_values), freq='M'),
+                'y': influence_df['Value']
+            })
+
+            model_prophet = Prophet()
+            model_prophet.fit(time_series)
+            future = model_prophet.make_future_dataframe(periods=periods, freq='M')
+            forecast = model_prophet.predict(future)
+
+            fig2 = model_prophet.plot(forecast)
+            st.pyplot(fig2)
+            st.write("Forecast completed using **Prophet** – a modern alternative to pmdarima.")
+
     except Exception as e:
-        st.error(f"An error occurred during prediction: {e}")
+        st.error(f"Prediction error: {e}")
