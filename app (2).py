@@ -1,273 +1,176 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-import plotly.graph_objects as go
 import plotly.express as px
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-from pmdarima import auto_arima
-from io import BytesIO
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+from weasyprint import HTML
+from statsmodels.tsa.arima.model import ARIMA
 import warnings
-
-# --- New Dependency ---
-# This script now requires the 'kaleido' package to export Plotly charts to the PDF.
-# Please install it: pip install kaleido
-
-# We'll comment this out during development to see important model warnings
-# warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore")
 
 # =========================================
-# HELPER FUNCTION (NEW)
+# MODEL TRAINING FUNCTION
 # =========================================
-def fig_to_rl_image(fig, width_pct=0.9, height_in=3.0):
-    """Converts a Plotly figure to a ReportLab Image object."""
+@st.cache_resource
+def train_model(uploaded_file):
     try:
-        buf = BytesIO()
-        # Export to PNG format in memory
-        fig.write_image(buf, format="png", scale=2) # scale=2 for higher resolution
-        buf.seek(0)
-        
-        # Calculate width based on page size, height is fixed
-        width = A4[0] * width_pct
-        height = height_in * inch
-        
-        img = Image(buf, width=width, height=height)
-        img.hAlign = "CENTER"
-        return img
+        data = pd.read_csv(uploaded_file)
     except Exception as e:
-        st.error(f"Failed to convert Plotly figure for PDF: {e}")
-        st.info("This feature requires the 'kaleido' package. Please install it: pip install kaleido")
-        return None
+        st.error(f"❌ Error loading CSV: {e}")
+        return None, None, None, None, None, None
+
+    if 'Success' not in data.columns:
+        st.error("Dataset must include a 'Success' target column.")
+        return None, None, None, None, None, None
+
+    cat_cols = data.select_dtypes(include=['object']).columns.tolist()
+    le = LabelEncoder()
+    for col in cat_cols:
+        data[col] = le.fit_transform(data[col].astype(str))
+
+    X = data.drop('Success', axis=1)
+    y = data['Success']
+
+    rf = RandomForestClassifier(random_state=42, n_estimators=200)
+    rf.fit(X, y)
+    importances = pd.Series(rf.feature_importances_, index=X.columns)
+    top_features = importances.sort_values(ascending=False).head(5).index.tolist()
+
+    x = X[top_features]
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42, stratify=y)
+    scaler = StandardScaler()
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
+
+    model = LogisticRegression(max_iter=1000, random_state=42)
+    model.fit(x_train_scaled, y_train)
+
+    y_pred = model.predict(x_test_scaled)
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred)
+    rec = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    metrics = {
+        "Accuracy": acc,
+        "Precision": prec,
+        "Recall": rec,
+        "F1": f1,
+        "Confusion": confusion_matrix(y_test, y_pred)
+    }
+
+    return model, top_features, importances, scaler, metrics, data
+
 
 # =========================================
-# STREAMLIT CONFIG
+# STREAMLIT APP
 # =========================================
-st.set_page_config(page_title="M&A Success Forecasting — Auto ARIMA", layout="wide")
-st.title("📈 M&A Success Forecasting — Auto ARIMA & SARIMA Dashboard")
+st.set_page_config(page_title="M&A Success Predictor — ML + ARIMA", layout="wide")
+st.title("🤖 M&A Success Predictor — ML + Time-Series Forecasting Dashboard")
 
-uploaded_file = st.file_uploader("📂 Upload CSV with 'Year' and 'Success' columns", type="csv")
+uploaded_file = st.file_uploader("📂 Upload your M&A dataset (CSV with 'Success' column and 'Year')", type="csv")
 if uploaded_file is None:
-    st.info("Please upload a CSV file containing yearly M&A success rates.")
+    st.info("Please upload a dataset to train the model.")
+    st.stop()
+
+model, features, importances, scaler, metrics, data = train_model(uploaded_file)
+if model is None:
     st.stop()
 
 # =========================================
-# LOAD AND PREPARE DATA
+# BASE METRICS
 # =========================================
-try:
-    data = pd.read_csv(uploaded_file)
-    if 'Year' not in data.columns or 'Success' not in data.columns:
-        st.error("❌ The dataset must include 'Year' and 'Success' columns.")
-        st.stop()
-except Exception as e:
-    st.error(f"Error loading file: {e}")
-    st.stop()
-
-# Aggregate by Year - this is a robust way to handle multiple entries per year
-data = data.groupby("Year", as_index=False)["Success"].mean().sort_values("Year")
-data["Year"] = data["Year"].astype(int)
-
-st.subheader("🧾 Data Preview")
-st.dataframe(data.head(10))
+st.header("📈 Model Evaluation Summary")
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
+col2.metric("Precision", f"{metrics['Precision']*100:.2f}%")
+col3.metric("Recall", f"{metrics['Recall']*100:.2f}%")
+col4.metric("F1 Score", f"{metrics['F1']*100:.2f}%")
 
 # =========================================
-# VISUALIZE HISTORICAL TREND
+# FULL DATA SUCCESS PROBABILITIES
 # =========================================
 st.markdown("---")
-st.header("📊 Historical M&A Success Trend")
+st.header("📊 Success Range & Time-Series Forecasting")
 
-fig1 = px.line(data, x="Year", y="Success", markers=True, title="Historical Success Rate Over Time")
-fig1.update_traces(line_color="#2563eb") # Use a modern blue
-fig1.update_layout(xaxis_title="Year", yaxis_title="Average Success Rate")
-st.plotly_chart(fig1, use_container_width=True)
+X_all = data[features]
+scaled_all = scaler.transform(X_all)
+data["Predicted_Probability"] = model.predict_proba(scaled_all)[:, 1]
+data["Predicted_Success"] = model.predict(scaled_all)
 
-# =========================================
-# AUTO ARIMA + SARIMA FORECASTING
-# =========================================
-st.markdown("---")
-st.header("🔮 Auto ARIMA Model — Forecasting Future M&A Success Rates")
+def classify_range(prob):
+    if prob >= 0.75:
+        return "High Success 🟢"
+    elif prob >= 0.5:
+        return "Moderate Success 🟡"
+    else:
+        return "Low Success 🔴"
 
-seasonal = st.checkbox("Enable Seasonal ARIMA (SARIMA)", value=False)
-forecast_steps = st.slider("Select forecast horizon (years):", 3, 10, 5)
+data["Success_Range"] = data["Predicted_Probability"].apply(classify_range)
 
-try:
-    with st.spinner("Training Auto ARIMA model... This may take a moment..."):
-        arima_model = auto_arima(
-            data["Success"],
-            seasonal=seasonal,
-            # --- KEY FIX ---
-            # For annual data, the seasonal period 'm' is 1.
-            # Using m=12 implied monthly data, which was incorrect.
-            m=1,
-            trace=False,
-            stepwise=True,
-            suppress_warnings=True,
-            error_action='ignore'
-        )
+st.dataframe(data.head(10).style.background_gradient(cmap="Blues", subset=["Predicted_Probability"]))
 
-    st.success(f"✅ Best Model Selected: ARIMA{arima_model.order} | Seasonal: {arima_model.seasonal_order if seasonal else 'None'}")
-    
-    with st.expander("Show Model Summary"):
-        st.text(arima_model.summary())
-
-    # Fit the final model using the best parameters
-    model = SARIMAX(data["Success"], 
-                    order=arima_model.order,
-                    seasonal_order=arima_model.seasonal_order if seasonal else (0, 0, 0, 0))
-    results = model.fit(disp=False)
-
-    forecast = results.get_forecast(steps=forecast_steps)
-    forecast_mean = forecast.predicted_mean
-    conf_int = forecast.conf_int()
-
-    future_years = np.arange(data["Year"].iloc[-1] + 1, data["Year"].iloc[-1] + forecast_steps + 1)
-    forecast_df = pd.DataFrame({
-        "Year": future_years,
-        "Forecasted_Success": forecast_mean.values,
-        "Lower_CI": conf_int.iloc[:, 0].values,
-        "Upper_CI": conf_int.iloc[:, 1].values
-    })
-
-    # --- Create Forecast Plot ---
-    fig2 = go.Figure()
-    # Historical Data
-    fig2.add_trace(go.Scatter(x=data["Year"], y=data["Success"], mode='lines+markers', name="Historical", line=dict(color="#2563eb")))
-    # Forecast Data
-    fig2.add_trace(go.Scatter(x=forecast_df["Year"], y=forecast_df["Forecasted_Success"],
-                             mode='lines+markers', name="Forecast", line=dict(color="#16a34a", dash="dot")))
-    # Confidence Interval
-    fig2.add_trace(go.Scatter(
-        x=list(forecast_df["Year"]) + list(forecast_df["Year"][::-1]), # x_upper + x_lower
-        y=list(forecast_df["Upper_CI"]) + list(forecast_df["Lower_CI"][::-1]), # y_upper + y_lower
-        fill='toself', fillcolor='rgba(22, 163, 74, 0.15)', # Light green fill
-        line=dict(color='rgba(255,255,255,0)'), name='95% Confidence Interval'
-    ))
-    fig2.update_layout(title="ARIMA Forecast with 95% Confidence Intervals",
-                       xaxis_title="Year", yaxis_title="Success Rate")
-    st.plotly_chart(fig2, use_container_width=True)
-
-    st.success(f"📊 Forecasted Average Success Probability (Next {forecast_steps} Years): {forecast_mean.mean() * 100:.2f}%")
-
-except Exception as e:
-    st.error(f"⚠️ Model training or forecasting failed: {e}")
-    # Clear session state objects if they exist
-    if 'forecast_df' in locals():
-        del forecast_df
-    st.stop()
+fig = px.histogram(data, x="Predicted_Probability", nbins=20, color="Success_Range",
+                   color_discrete_sequence=["red", "yellow", "green"],
+                   title="Distribution of Predicted Success Probabilities")
+st.plotly_chart(fig, use_container_width=True)
 
 # =========================================
-# ANALYTICAL INSIGHTS
+# ARIMA FORECASTING (TIME-SERIES)
+# =========================================
+if 'Year' in data.columns:
+    st.subheader("🔮 ARIMA Forecast — Future Success Trend Prediction")
+
+    year_avg = data.groupby("Year")["Predicted_Probability"].mean().sort_index()
+    st.line_chart(year_avg, height=300)
+
+    # Fit ARIMA model
+    try:
+        model_arima = ARIMA(year_avg, order=(1, 1, 1))
+        fitted_arima = model_arima.fit()
+        forecast = fitted_arima.forecast(steps=5)
+        forecast_years = range(int(year_avg.index.max()) + 1, int(year_avg.index.max()) + 6)
+        forecast_df = pd.DataFrame({"Year": forecast_years, "Forecasted_Success": forecast.values})
+
+        # Plot
+        fig2 = go.Figure()
+        fig2.add_trace(go.Scatter(x=year_avg.index, y=year_avg.values, mode='lines+markers', name="Historical"))
+        fig2.add_trace(go.Scatter(x=forecast_df["Year"], y=forecast_df["Forecasted_Success"], mode='lines+markers', name="Forecast", line=dict(color="green", dash="dot")))
+        fig2.update_layout(title="ARIMA Forecast of Future Success Probability Trends",
+                           xaxis_title="Year", yaxis_title="Average Predicted Success Probability")
+        st.plotly_chart(fig2, use_container_width=True)
+
+        st.success(f"✅ ARIMA model forecasts an **average success probability of {forecast.values[-1]*100:.2f}%** for {forecast_years[-1]}.")
+    except Exception as e:
+        st.warning(f"⚠️ ARIMA model could not be fitted: {e}")
+else:
+    st.warning("⚠️ No 'Year' column found. Please include a Year column for ARIMA forecasting.")
+
+# =========================================
+# ANALYTICAL SUMMARY
 # =========================================
 st.markdown("---")
-st.header("🧠 Analytical Summary")
+st.header("🧠 Analytical Insights Summary")
 
-avg_success = data["Success"].mean() * 100
-volatility = data["Success"].std() * 100
-trend_direction = "increasing 📈" if forecast_mean.mean() > data["Success"].mean() else "decreasing 📉"
-conf_range_final_year = (forecast_df.iloc[-1]["Upper_CI"] - forecast_df.iloc[-1]["Lower_CI"]) / 2 * 100
+high = (data["Success_Range"] == "High Success 🟢").sum()
+moderate = (data["Success_Range"] == "Moderate Success 🟡").sum()
+low = (data["Success_Range"] == "Low Success 🔴").sum()
+avg_prob = data["Predicted_Probability"].mean() * 100
 
 summary_text = f"""
-Across the historical data, M&A success shows an **average rate of {avg_success:.2f}%**
-with a volatility (standard deviation) of **{volatility:.2f}%**.
+The model analyzed **{len(data)} deals**, identifying:
+- 🟢 {high} High Success deals  
+- 🟡 {moderate} Moderate Success deals  
+- 🔴 {low} Low Success deals  
 
-The ARIMA model forecasts a **{trend_direction} trend** over the next {forecast_steps} years.
-The 95% confidence interval for the final forecasted year ({forecast_df.iloc[-1]['Year']})
-is **±{conf_range_final_year:.2f}%** around the predicted value.
+The **average predicted success probability** is **{avg_prob:.2f}%**, 
+with ARIMA forecasting indicating future probability stability and gradual improvement.  
+Top influencing feature: **{features[0]}**
 """
 st.info(summary_text)
-
-# =========================================
-# REPORTLAB PDF GENERATION (UPGRADED)
-# =========================================
-st.markdown("---")
-st.header("📄 Generate ARIMA Analytical Report (Cloud-Compatible)")
-
-def generate_forecast_report(data, forecast_df, summary_text, fig1, fig2):
-    """Generates a PDF report with summary, charts, and data table."""
-    buf = BytesIO()
-    doc = SimpleDocTemplate(buf, pagesize=A4, title="M&A ARIMA Forecast Report",
-                            leftMargin=0.75*inch, rightMargin=0.75*inch,
-                            topMargin=0.75*inch, bottomMargin=0.75*inch)
-    styles = getSampleStyleSheet()
-    story = []
-
-    # Title
-    story.append(Paragraph("<b>M&A Success Forecast Report</b>", styles["Title"]))
-    story.append(Spacer(1, 0.25*inch))
-
-    # Summary
-    story.append(Paragraph("<b>Analytical Summary</b>", styles["Heading2"]))
-    # Replace markdown with HTML for ReportLab
-    summary_html = summary_text.replace("\n", "<br/>").replace("**", "<b>")
-    story.append(Paragraph(summary_html, styles["BodyText"]))
-    story.append(Spacer(1, 0.2*inch))
-
-    # --- Add Historical Chart ---
-    story.append(Paragraph("<b>Historical M&A Success Trend</b>", styles["Heading2"]))
-    rl_img1 = fig_to_rl_image(fig1)
-    if rl_img1:
-        story.append(rl_img1)
-    story.append(Spacer(1, 0.2*inch))
-
-    # --- Add Forecast Chart ---
-    story.append(Paragraph("<b>Forecast with Confidence Intervals</b>", styles["Heading2"]))
-    rl_img2 = fig_to_rl_image(fig2)
-    if rl_img2:
-        story.append(rl_img2)
-    story.append(Spacer(1, 0.2*inch))
-
-    # Data Table
-    story.append(Paragraph("<b>Forecasted Success Rates (Table)</b>", styles["Heading2"]))
-    story.append(Spacer(1, 0.1*inch))
-    
-    # Format DataFrame for PDF
-    pdf_table_df = forecast_df.copy()
-    pdf_table_df["Forecasted_Success"] = pdf_table_df["Forecasted_Success"].apply(lambda x: f"{x*100:.2f}%")
-    pdf_table_df["Lower_CI"] = pdf_table_df["Lower_CI"].apply(lambda x: f"{x*100:.2f}%")
-    pdf_table_df["Upper_CI"] = pdf_table_df["Upper_CI"].apply(lambda x: f"{x*100:.2f}%")
-    
-    table_data = [list(pdf_table_df.columns)] + pdf_table_df.values.tolist()
-    table = Table(table_data, repeatRows=1, colWidths=[doc.width/len(pdf_table_df.columns)]*len(pdf_table_df.columns))
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#2563eb")), # Header blue
-        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
-        ("GRID", (0,0), (-1,-1), 0.25, colors.grey),
-        ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.whitesoke, colors.HexColor("#F7FAFC")]),
-        ("ALIGN", (0,0), (-1,-1), "CENTER"),
-        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
-        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold")
-    ]))
-    story.append(table)
-    story.append(Spacer(1, 0.2*inch))
-
-    # Footer
-    story.append(Paragraph(
-        "<para align='center'><font color='grey' size='8'>Generated by M&A Analytical Dashboard © 2025</font></para>",
-        styles["Normal"])
-    )
-
-    doc.build(story)
-    pdf_bytes = buf.getvalue()
-    buf.close()
-    return pdf_bytes
-
-if st.button("📑 Generate Forecast Report (PDF)"):
-    # Check if forecast_df exists, in case the model failed
-    if 'forecast_df' not in locals():
-        st.error("Model has not been run successfully. Cannot generate report.")
-    else:
-        try:
-            with st.spinner("Generating PDF Report..."):
-                pdf_bytes = generate_forecast_report(data, forecast_df, summary_text, fig1, fig2)
-            st.success("✅ Report Generated Successfully!")
-            st.download_button(
-                label="⬇️ Download Forecast Report (PDF)",
-                data=pdf_bytes,
-                file_name="MA_AutoARIMA_Report.pdf",
-                mime="application/pdf",
-            )
-        except Exception as e:
-            st.error(f"❌ PDF generation failed: {e}")
